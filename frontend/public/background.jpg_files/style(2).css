@@ -1,0 +1,135 @@
+/*
+Theme Name: Bridge Child
+Theme URI: http://demo.qodeinteractive.com/bridge/
+Description: A child theme of Bridge Theme
+Author: Qode Interactive
+Author URI: http://www.qodethemes.com/
+Version: 1.0.0
+Template: bridge
+*/
+@import url("../bridge/style.css");
+
+.portfolio_gallery a .gallery_text_inner, .portfolio_slider .portfolio_like, .projects_holder article .portfolio_like {display: none;}
+.portfolio_navigation, .portfolio_navigation .portfolio_prev a{text-align:left!important;}
+.portfolio_navigation .portfolio_next a{text-align:right!important;}
+.portfolio_navigation .portfolio_prev, .portfolio_navigation .portfolio_next{position:relative;}
+.comment_holder .comment_number, .portfolio_navigation.navigation_title .post_info{display:block!important;}
+.footer_top a{font-size:12px!important;}
+.portfolio_navigation.navigation_title {display: none;}
+.mobile_top_bar{display:none;}
+div.wpcf7-response-output {color: #2b2c2e;}
+.footer_col3 .wpcf7-response-output {color: #fff;}
+.serv_form_title{margin-bottom:10px;}
+.serv_form_sub_title {margin-bottom: 30px;}
+body.single-portfolio_page .container .container_inner.default_template_holder {padding-top: 70px!important;}
+.portfolio_single.portfolio_template_6{
+	display:flex;
+	flex-direction:column;
+}
+.portfolio_single.portfolio_template_6 .portfolio_gallery {
+    order: 2;
+    margin-top: 50px;
+}
+.portfolio_single.portfolio_template_6 .portfolio_container {order: 1;}
+.portfolio_single.portfolio_template_6 .portfolio_navigation.navigation_title{order:3;}
+body.single-portfolio_page .qode_portfolio_related h4 {padding: 35px 0 55px;}
+.serv_form_sec input, .serv_form_sec textarea {margin-bottom: 18px !important;}
+.home_consult_sec h3 {
+    font-size: 38px;
+    color: #fff;
+    margin-bottom: 30px!important;
+}
+.home_consult_sec h3 a {
+    font-size: 38px;
+    color: #fff;
+}
+.home_consult_sec {
+    padding: 70px 0px 40px;
+}
+.portfolio_container .column1{
+	width:100%;
+	float:none;
+} 
+.portfolio_container .column2 {display: none;}
+table.portfolio_table {
+    width: 100%;
+    table-layout: fixed;
+}
+table.portfolio_table tr th {
+    background: #ffcc00;
+    color: #fff;
+    border: 1px solid #000;
+	vertical-align: middle;
+	word-break: break-word;
+}
+table.portfolio_table tr td {
+    border: 1px solid #000;
+    vertical-align: middle;
+    word-break: break-word;
+}
+@media(max-width:1000px){
+	.header_top {
+		background: #303030 !important;
+		line-height: unset;
+    	padding: 10px 0px 5px;
+	}
+	.header_top .left{display:none;}
+	.header_top .container_inner{width:100%!important;}
+	.logo_wrapper, .q_logo a{left: 0!important;}
+	.mobile_menu_button {float: right!important;}
+	a.mob_phone_icon {margin-right: 10px;}
+	body.single-portfolio_page .container .container_inner.default_template_holder {padding-top: 50px!important;}
+	table.portfolio_table {width: 100%;}
+	table.portfolio_table thead tr th {display: none;}
+	table.portfolio_table tbody tr, table.portfolio_table tbody tr td {
+		display: block;
+		width: 100%;
+		position: relative;
+		text-align: left;
+		box-sizing:border-box;
+	}
+	table.portfolio_table tbody tr td {
+		padding: 20px 20px 20px 160px;
+		min-height: 61px;
+		vertical-align: middle;
+		display: flex;
+		align-items: center;
+	}
+	table.portfolio_table tbody tr td:before {
+		content: attr(data-title);
+		font-weight: 600;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 120px;
+		height: 100%;
+		padding: 0px 10px !important;
+		background-color: #ffcc00;
+		border-right: 1px solid #000;
+		color: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.portfolio_single.portfolio_template_6 .portfolio_gallery {margin-top:0px;}
+}
+@media(max-width:800px){
+	.carousel:not(.advanced_responsiveness) .carousel-inner .slider_content{vertical-align:top!important;}
+}
+@media(max-width:767px){
+	.mob_sep {display: none;}
+	.serv_form_sec {margin-top: 30px;}
+	.contact_page_info.vc_row{padding:30px 0px!important;}
+	.serv_form_sec.contact_form_sec{margin-top:-0px;}
+	.project_grid_sec.vc_row{margin-bottom:35px!important;}
+}
+@media(max-width:480px){
+	.q_slider .carousel, .qode_slider_preloader, .carousel-inner>.item{padding-top:0px!important;}
+	.portfolio_navigation.navigation_title {display: none;}
+	.subtitle_above_title {margin-top: 20px !important;}
+	.mobile_top_bar{display:block;}
+	.desktop_top_bar{display:none;}
+}
+@media(max-width:375px){
+	.top_header_address_info{display:block;}
+}
