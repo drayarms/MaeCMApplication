@@ -1,0 +1,56 @@
+#version: "3.9"
+
+#services:
+  #backend:
+    #build:
+      #context: ./backend
+      #dockerfile: Dockerfile
+    #image: your_ecr_repo/flask-app:latest   # replaced when you push / pull
+    #container_name: flask_app
+    #restart: unless-stopped
+    #environment:
+      #- FLASK_ENV=production
+    #expose:
+      #- "5000"
+
+  #frontend:
+    #build:
+      #context: ./frontend
+      #dockerfile: Dockerfile
+    #image: your_ecr_repo/react-app:latest   # replaced when you push / pull
+    #container_name: react_nginx
+    #restart: unless-stopped
+    #ports:
+      #- "80:80"
+    #depends_on:
+      #- backend
+
+
+version: "3.8"
+
+services:
+  frontend:
+    image: ${ECR_REGISTRY}/react-frontend:latest #${ECR_REGISTRY} is env var defined in .env
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: react-frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+  backend:
+    image: ${ECR_REGISTRY}/flask-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: flask-backend
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+
+#Optional in case your don't want to use the default network automatically created for the above services
+#networks:
+  #appnet:
+    #driver: bridge

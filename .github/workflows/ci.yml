@@ -1,0 +1,112 @@
+#First Workflow uses OIDC to authenticate AWS
+name: CI-Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  id-token: write     # REQUIRED for OIDC
+  contents: read
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Load non-secret environment values (ECR registry URI)
+      - name: Load environment variables
+        run: |
+          set -a
+          source .env
+          set +a
+
+      # 🔐 THIS is where AWS auth actually happens
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: $AWS_ROLE_TO_ASSUME
+          aws-region: $AWS_REGION
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Backend Image
+        run: |
+          docker build -t my-backend ./backend
+          docker tag my-backend:latest $ECR_REGISTRY/my-backend:latest
+          docker push $ECR_REGISTRY/my-backend:latest
+
+      - name: Build and Push Frontend Image
+        run: |
+          docker build -t my-frontend ./frontend
+          docker tag my-frontend:latest $ECR_REGISTRY/my-frontend:latest
+          docker push $ECR_REGISTRY/my-frontend:latest
+
+      - name: Upload compose file
+        uses: actions/upload-artifact@v4
+        with:
+          name: compose
+          path: docker-compose.yml
+
+
+#source .env actually refers to $GITHUB_WORKSPACE/.env which is root of dir
+#$ECR_REGISTRY from .env
+#AWS_REGION from .env
+#We need .env and .env.example in root. There we define out ECR
+
+
+
+#Second workflow uses GitHub Actions secrets to authenticate AWS. You must hard code the secrets in GitHub
+#name: CI-Build
+
+#on:
+  #push:
+    #branches: [main]
+  #pull_request:
+    #branches: [main]
+
+#jobs:
+  #build-and-push:
+    #runs-on: ubuntu-latest
+
+    #steps:
+      #- name: Checkout
+        #uses: actions/checkout@v4
+
+      ## Load .env so Docker + shell can use ECR_REGISTRY
+      #- name: Load environment variables
+        #run: |
+          #set -a
+          #source .env 
+          #set +a
+
+      #- name: Login to ECR
+        #uses: aws-actions/configure-aws-credentials@v4
+        #with:
+          #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #aws-region: $AWS_REGION
+
+      #- name: Build and Push Backend Image
+        #run: |
+          #docker build -t my-backend ./backend 
+          #docker tag my-backend:latest $ECR_REGISTRY/my-backend:latest 
+          #docker push $ECR_REGISTRY/my-backend:latest   
+
+      #- name: Build and Push Frontend Image
+        #run: |
+          #docker build -t my-frontend ./frontend
+          #docker tag my-frontend:latest $ECR_REGISTRY/my-frontend:latest
+          #docker push $ECR_REGISTRY/my-frontend:latest
+
+      #- name: Upload compose file
+        #uses: actions/upload-artifact@v4 #Uploads docker-compose file so that it can be accessible to the CD portion which runs after a successful CI
+        #with:
+          #name: compose
+          #path: docker-compose.yml 
