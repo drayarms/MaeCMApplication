@@ -20,11 +20,21 @@ jobs:
         uses: actions/checkout@v4
 
       # Load non-secret environment values (ECR registry URI)
+      #- name: Load environment variables
+        #run: |
+          #set -a
+          #source .env
+          #set +a
+
       - name: Load environment variables
         run: |
           set -a
           source .env
           set +a
+
+          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
+          echo "AWS_ROLE_TO_ASSUME=$AWS_ROLE_TO_ASSUME" >> $GITHUB_ENV
+          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV          
 
       # 🔐 THIS is where AWS auth actually happens
       - name: Configure AWS credentials (OIDC)
