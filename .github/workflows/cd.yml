@@ -1,73 +1,88 @@
+#Works
 #name: CD-Deploy
 
 #on:
   #workflow_run:
     #workflows: ["CI-Build"]
-    #types:
-      #- completed
+    #types: [completed]
+
+#permissions:
+  #contents: read
+  #actions: read  # Needed to download workflow metadata if necessary
 
 #jobs:
   #deploy:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    ## Run only if the triggering CI workflow succeeded
+    #if: github.event.workflow_run.conclusion == 'success'
     #runs-on: ubuntu-latest
 
     #steps:
-      ## 1️⃣ Checkout repo so .env and docker-compose.yml exist
-      #- name: Checkout repo
+      ## 1️⃣ Checkout repo (needed for .env and docker-compose.yml)
+      #- name: Checkout
         #uses: actions/checkout@v4
 
-      ## 2️⃣ Load .env into GitHub Actions environment
-      #- name: Load environment variables
+      ## 2️⃣ Load environment variables
+      #- name: Load .env
         #run: |
           #set -a
           #source .env
           #set +a
-
-          ## Export explicitly to GitHub Actions env context
-          #echo "EC2_USER=$EC2_USER" >> $GITHUB_ENV
           #echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           #echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
-          #echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
-          #echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
           #echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      ## 3️⃣ Upload docker-compose.yml to EC2
-      #- name: Upload compose to EC2
-        #uses: appleboy/scp-action@v0.1.7
-        #with:
-          #host: ${{ secrets.EC2_HOST }}
-          #username: ${{ env.EC2_USER }}
-          #key: ${{ secrets.EC2_SSH_KEY }}
-          #source: "docker-compose.yml"
-          #target: "/home/${{ env.EC2_USER }}/app"
+      ## 3️⃣ Recompute deterministic image tags based on commit SHA
+      #- name: Compute image tags
+        #run: |
+          #FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
+          #BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
+          #echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
+          #echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
-      ## 4️⃣ Upload .env to EC2
-      #- name: Upload .env to EC2
+      ## 4️⃣ Upload files to EC2
+      #- name: Upload files to EC2
         #uses: appleboy/scp-action@v0.1.7
         #with:
           #host: ${{ secrets.EC2_HOST }}
-          #username: ${{ env.EC2_USER }}
+          #username: ${{ secrets.EC2_USER }}
           #key: ${{ secrets.EC2_SSH_KEY }}
-          #source: ".env"
-          #target: "/home/${{ env.EC2_USER }}/app"
+          #source: "docker-compose.yml,.env"
+          #target: "/home/${{ secrets.EC2_USER }}/app"
 
       ## 5️⃣ SSH into EC2 and deploy
-      #- name: SSH and redeploy
+      #- name: Deploy on EC2
         #uses: appleboy/ssh-action@v0.1.10
         #with:
           #host: ${{ secrets.EC2_HOST }}
-          #username: ${{ env.EC2_USER }}
+          #username: ${{ secrets.EC2_USER }}
           #key: ${{ secrets.EC2_SSH_KEY }}
           #script: |
-            #cd /home/${{ env.EC2_USER }}/app
-            # Export environment variables for docker-compose
-            #export $(grep -v '^#' .env | xargs)
+            #APP_DIR="/home/${{ secrets.EC2_USER }}/app"
+            #cd $APP_DIR
 
-            #aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+            ## Load env variables
+            #set -a
+            #[ -f .env ] && source .env
+            #set +a
 
-            #docker compose pull
-            #docker compose up -d --remove-orphans
-##
+            ## Use deterministic image tags
+            #FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
+            #BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
+
+            ## Authenticate Docker to ECR
+            #aws ecr get-login-password --region $AWS_REGION \
+              #| docker login --username AWS --password-stdin $ECR_REGISTRY
+
+            ## Pull images from ECR
+            #docker compose --env-file .env pull
+
+            ## Deploy containers
+            #docker compose --env-file .env up -d --remove-orphans
+
+            ## Optional cleanup
+            #docker image prune -f
+
+
 
 
 name: CD-Deploy
@@ -79,16 +94,16 @@ on:
 
 permissions:
   contents: read
-  actions: read  # Needed to download workflow metadata if necessary
+  actions: read  # Required for workflow_run metadata
 
 jobs:
   deploy:
-    # Run only if the triggering CI workflow succeeded
+    # Only run if the triggering CI workflow succeeded
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (needed for .env and docker-compose.yml)
+      # 1️⃣ Checkout repository (needed for .env and docker-compose.yml)
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -96,21 +111,13 @@ jobs:
       - name: Load .env
         run: |
           set -a
-          source .env
+          [ -f .env ] && source .env
           set +a
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
           echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      # 3️⃣ Recompute deterministic image tags based on commit SHA
-      - name: Compute image tags
-        run: |
-          FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
-          BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
-          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
-          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
-
-      # 4️⃣ Upload files to EC2
+      # 3️⃣ Upload files to EC2
       - name: Upload files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -120,7 +127,7 @@ jobs:
           source: "docker-compose.yml,.env"
           target: "/home/${{ secrets.EC2_USER }}/app"
 
-      # 5️⃣ SSH into EC2 and deploy
+      # 4️⃣ SSH into EC2 and deploy with full debug
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -131,27 +138,45 @@ jobs:
             APP_DIR="/home/${{ secrets.EC2_USER }}/app"
             cd $APP_DIR
 
-            # Load env variables
+            echo "===== Loading Environment Variables ====="
             set -a
             [ -f .env ] && source .env
             set +a
+            echo "ECR_REGISTRY=$ECR_REGISTRY"
+            echo "ECR_REPO=$ECR_REPO"
+            echo "AWS_REGION=$AWS_REGION"
 
-            # Use deterministic image tags
+            echo "===== Computing Deterministic Image Tags ====="
             FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
             BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
+            echo "FRONTEND_TAG=$FRONTEND_TAG"
+            echo "BACKEND_TAG=$BACKEND_TAG"
 
-            # Authenticate Docker to ECR
+            echo "===== Docker Login to ECR ====="
+            set -x
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            # Pull images from ECR
-            docker compose --env-file .env pull
+            echo "===== Pulling Docker Images ====="
+            docker pull $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG || exit 1
+            docker pull $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG || exit 1
 
-            # Deploy containers
+            echo "===== List Docker Images ====="
+            docker images
+
+            echo "===== Deploying Containers ====="
             docker compose --env-file .env up -d --remove-orphans
 
-            # Optional cleanup
+            echo "===== Running Containers ====="
+            docker ps
+
+            echo "===== Cleanup Unused Images ====="
             docker image prune -f
+
+
+
+
+
 
 
 
