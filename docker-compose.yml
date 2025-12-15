@@ -30,7 +30,7 @@ version: "3.8"
 
 services:
   frontend:
-    image: ${ECR_REGISTRY}/react-frontend:latest #${ECR_REGISTRY} is env var defined in .env
+    image: ${ECR_REGISTRY}/${ECR_REPO}:${FRONTEND_TAG} #${ECR_REGISTRY}, {ECR_REPO}, {FRONTEND_TAG} defined in .env
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
 
   backend:
-    image: ${ECR_REGISTRY}/flask-backend:latest
+    image: ${ECR_REGISTRY}/${ECR_REPO}:${BACKEND_TAG}
     build:
       context: ./backend
       dockerfile: Dockerfile
