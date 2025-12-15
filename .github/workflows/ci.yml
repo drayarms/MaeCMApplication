@@ -1,72 +1,4 @@
-#name: CI-Build
-
-#on:
-  #push:
-    #branches: [main]
-  #pull_request:
-    #branches: [main]
-
-#permissions:
-  #id-token: write     # REQUIRED for OIDC
-  #contents: read
-
-#jobs:
-  #build-and-push:
-    #runs-on: ubuntu-latest
-
-    #steps:
-      #- name: Checkout
-        #uses: actions/checkout@v4
-
-      ## Load non-secret environment values (ECR registry URI)
-      ##- name: Load environment variables
-        ##run: |
-          ##set -a
-          ##source .env
-          ##set +a
-
-      #- name: Load environment variables
-        #run: |
-          #set -a
-          #source .env
-          #set +a
-
-          #echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
-          #echo "AWS_ROLE_TO_ASSUME=$AWS_ROLE_TO_ASSUME" >> $GITHUB_ENV
-          #echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV   
-          #echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV    
-          #echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV  
-          #echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV      
-
-      ## 🔐 THIS is where AWS auth actually happens
-      #- name: Configure AWS credentials (OIDC)
-        #uses: aws-actions/configure-aws-credentials@v4
-        #with:
-          #role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
-          #aws-region: ${{ env.AWS_REGION }}
-
-      #- name: Login to ECR
-        #uses: aws-actions/amazon-ecr-login@v2
-
-      #- name: Build and Push Backend Image
-        #run: |
-          #docker build -t my-backend ./backend
-          #docker tag my-backend:latest $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
-          #docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
-
-      #- name: Build and Push Frontend Image
-        #run: |
-          #docker build -t my-frontend ./frontend
-          #docker tag my-frontend:latest $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
-          #docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
-
-      #- name: Upload compose file
-        #uses: actions/upload-artifact@v4
-        #with:
-          #name: compose
-          #path: docker-compose.yml
-        
-
+#Works
 #name: CI-Build
 
 #on:
@@ -84,47 +16,75 @@
     #runs-on: ubuntu-latest
 
     #steps:
-      #- name: Checkout code
+      ## 1️⃣ Checkout
+      #- name: Checkout
         #uses: actions/checkout@v4
 
-      #- name: Load .env
+      ## 2️⃣ Load base env (NO TAGS)
+      #- name: Load base env
         #run: |
           #set -a
           #source .env
           #set +a
+
           #echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
           #echo "AWS_ROLE_TO_ASSUME=$AWS_ROLE_TO_ASSUME" >> $GITHUB_ENV
           #echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           #echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
 
-      #- name: Set image tags
+      ## 3️⃣ Generate immutable tags
+      #- name: Generate image tags
         #run: |
           #FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
           #BACKEND_TAG=$(git rev-parse --short HEAD)-backend
+
           #echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           #echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
+          #echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
+          #echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
+
+      ## 4️⃣ AWS auth (OIDC)
       #- name: Configure AWS credentials
         #uses: aws-actions/configure-aws-credentials@v4
         #with:
           #role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
           #aws-region: ${{ env.AWS_REGION }}
 
+      ## 5️⃣ Login to ECR
       #- name: Login to ECR
         #uses: aws-actions/amazon-ecr-login@v2
 
-      #- name: Build & push Docker images
+      ## 6️⃣ Build images (local tags resolved from compose)
+      #- name: Build images
         #run: |
           #docker compose build frontend backend
-          #docker compose push frontend
-          #docker compose push backend
 
-      #- name: Upload docker-compose.yml artifact
+      ## 7️⃣ Push images to ECR
+      #- name: Push images
+        #run: |
+          #docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
+          #docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
+
+      ## 8️⃣ Save image tags for CD
+      #- name: Save image tags
+        #run: |
+          #echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
+          #echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
+
+      ## 9️⃣ Upload docker-compose.yml
+      #- name: Upload compose file
         #uses: actions/upload-artifact@v4
         #with:
           #name: compose
           #path: docker-compose.yml
 
+      ## 🔟 Upload image tags
+      #- name: Upload image tags
+        #uses: actions/upload-artifact@v4
+        #with:
+          #name: image-tags
+          #path: image-tags.env
 
 
 name: CI-Build
@@ -144,12 +104,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout
+      # 1️⃣ Checkout code
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Load base env (NO TAGS)
-      - name: Load base env
+      # 2️⃣ Load base env (no tags)
+      - name: Load base environment
         run: |
           set -a
           source .env
@@ -169,6 +129,7 @@ jobs:
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
+          # Save tags for CD
           echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
           echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
 
@@ -184,35 +145,23 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       # 6️⃣ Build images (local tags resolved from compose)
-      - name: Build images
+      - name: Build Docker images
         run: |
           docker compose build frontend backend
 
       # 7️⃣ Push images to ECR
-      - name: Push images
+      - name: Push Docker images
         run: |
           docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
           docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-      # 8️⃣ Save image tags for CD
-      - name: Save image tags
-        run: |
-          echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
-          echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
-
-      # 9️⃣ Upload docker-compose.yml
-      - name: Upload compose file
-        uses: actions/upload-artifact@v4
-        with:
-          name: compose
-          path: docker-compose.yml
-
-      # 🔟 Upload image tags
-      - name: Upload image tags
+      # 8️⃣ Upload image tags for CD
+      - name: Upload image-tags artifact
         uses: actions/upload-artifact@v4
         with:
           name: image-tags
           path: image-tags.env
+
 
 
 
