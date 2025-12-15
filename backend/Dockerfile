@@ -1,6 +1,7 @@
 FROM python:3.10-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
 
@@ -20,6 +21,8 @@ EXPOSE 5000
 # Run with Gunicorn for production
 # Adjust worker count as needed; using 3 as a safe default
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "server:app", "--workers", "3", "--threads", "2", "--timeout", "120"]
+
+
 
 
 
