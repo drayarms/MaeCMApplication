@@ -96,26 +96,21 @@ permissions:
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (needed if using .env)
+      # 1️⃣ Checkout repo (needed for docker-compose.yml and .env)
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Download artifacts from CI
-      - name: Download docker-compose artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: compose
-
-      - name: Download image-tags artifact
+      # 2️⃣ Download image-tags artifact from CI
+      - name: Download image tags
         uses: actions/download-artifact@v4
         with:
           name: image-tags
 
-      # 3️⃣ Load image tags
+      # 3️⃣ Load image tags into environment
       - name: Load image tags
         run: |
           set -a
@@ -123,13 +118,15 @@ jobs:
           set +a
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
+          echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
 
       # 4️⃣ Deploy on EC2
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-          ECR_REPO: ${{ secrets.ECR_REPO }}
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+          ECR_REPO: ${{ env.ECR_REPO }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           FRONTEND_TAG: ${{ env.FRONTEND_TAG }}
           BACKEND_TAG: ${{ env.BACKEND_TAG }}
@@ -142,8 +139,12 @@ jobs:
             mkdir -p $APP_DIR
             cd $APP_DIR
 
-            # Copy docker-compose.yml from workflow workspace
-            cp $GITHUB_WORKSPACE/docker-compose.yml .
+            echo "===== Environment Variables ====="
+            echo "ECR_REGISTRY=$ECR_REGISTRY"
+            echo "ECR_REPO=$ECR_REPO"
+            echo "AWS_REGION=$AWS_REGION"
+            echo "FRONTEND_TAG=$FRONTEND_TAG"
+            echo "BACKEND_TAG=$BACKEND_TAG"
 
             echo "===== Docker Login to ECR ====="
             aws ecr get-login-password --region $AWS_REGION \
@@ -154,12 +155,13 @@ jobs:
             docker pull $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
             echo "===== Deploying Containers ====="
-            docker compose --env-file .env up -d --remove-orphans
+            docker compose up -d --remove-orphans
 
             echo "===== Running Containers ====="
             docker ps
 
             echo "===== Cleanup Unused Images ====="
             docker image prune -f
+
 
 
