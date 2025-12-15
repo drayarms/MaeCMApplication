@@ -87,6 +87,7 @@
           #path: image-tags.env
 
 
+
 name: CI-Build
 
 on:
@@ -124,7 +125,7 @@ jobs:
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
 
-      # 3️⃣ Generate immutable tags
+      # 3️⃣ Generate immutable image tags
       - name: Generate image tags
         id: set-tags
         run: |
@@ -134,10 +135,11 @@ jobs:
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
+          # Set workflow outputs for CD
           echo "frontend_tag=$FRONTEND_TAG" >> $GITHUB_OUTPUT
           echo "backend_tag=$BACKEND_TAG" >> $GITHUB_OUTPUT
 
-          # Save to file for CD
+          # Save to file for CD artifact
           echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
           echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
 
@@ -163,20 +165,19 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
           docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-      # 8️⃣ Upload docker-compose.yml
+      # 8️⃣ Upload docker-compose.yml artifact for CD
       - name: Upload compose file
         uses: actions/upload-artifact@v4
         with:
           name: compose
           path: docker-compose.yml
 
-      # 9️⃣ Upload image tags for CD
+      # 9️⃣ Upload image-tags.env artifact for CD
       - name: Upload image tags
         uses: actions/upload-artifact@v4
         with:
           name: image-tags
           path: image-tags.env
-
 
 
 
