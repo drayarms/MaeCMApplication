@@ -86,7 +86,6 @@ jobs:
     if: >
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push'
-
     runs-on: ubuntu-latest
 
     steps:
@@ -94,13 +93,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Download docker-compose.yml artifact from CI
+      # 2️⃣ Download docker-compose.yml artifact from the triggering CI workflow
       - name: Download compose file
         uses: actions/download-artifact@v4
         with:
           name: compose
 
-      # 3️⃣ Download image-tags artifact from CI
+      # 3️⃣ Download image-tags artifact from the triggering CI workflow
       - name: Download image tags
         uses: actions/download-artifact@v4
         with:
@@ -155,12 +154,8 @@ jobs:
             # Deploy containers with minimal downtime
             docker compose --env-file .env --env-file image-tags.env up -d --remove-orphans
 
-            # Optional: clean up unused images to save disk space
+            # Optional: clean up unused images
             docker image prune -f
-
-
-
-
 
 
 

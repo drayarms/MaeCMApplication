@@ -113,7 +113,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Load base env
+      # 2️⃣ Load base environment
       - name: Load base env
         run: |
           set -a
@@ -156,8 +156,7 @@ jobs:
 
       # 6️⃣ Build Docker images
       - name: Build images
-        run: |
-          docker compose build frontend backend
+        run: docker compose build frontend backend
 
       # 7️⃣ Push images to ECR
       - name: Push images
@@ -178,6 +177,7 @@ jobs:
         with:
           name: image-tags
           path: image-tags.env
+
 
 
 
