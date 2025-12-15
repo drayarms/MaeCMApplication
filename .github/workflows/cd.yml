@@ -83,6 +83,7 @@
             #docker image prune -f
 
 
+
 name: CD-Deploy
 
 on:
@@ -92,7 +93,7 @@ on:
 
 permissions:
   contents: read
-  actions: read
+  actions: read  # Required to download artifacts
 
 jobs:
   deploy:
@@ -102,41 +103,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (docker-compose.yml is already in repo)
+      # 1️⃣ Checkout repo (needed only for .env if used)
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Upload .env and image-tags.env to EC2
-      - name: Upload files to EC2
-        uses: appleboy/scp-action@v0.1.7
+      # 2️⃣ Download image-tags artifact from CI
+      - name: Download image tags
+        uses: actions/download-artifact@v4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: ".env,image-tags.env,docker-compose.yml"
-          target: "/home/${{ secrets.EC2_USER }}/app"
+          name: image-tags
 
-      # 3️⃣ SSH into EC2 and deploy images from ECR
+      # 3️⃣ Load image tags into environment
+      - name: Load image tags
+        run: |
+          set -a
+          source image-tags.env
+          set +a
+          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
+          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+
+      # 4️⃣ Deploy on EC2
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPO: ${{ secrets.ECR_REPO }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          FRONTEND_TAG: ${{ env.FRONTEND_TAG }}
+          BACKEND_TAG: ${{ env.BACKEND_TAG }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             APP_DIR="/home/${{ secrets.EC2_USER }}/app"
+            mkdir -p $APP_DIR
             cd $APP_DIR
 
-            echo "===== Load Environment Variables ====="
-            set -a
-            [ -f .env ] && source .env
-            [ -f image-tags.env ] && source image-tags.env
-            set +a
-
+            echo "===== Environment Variables ====="
             echo "ECR_REGISTRY=$ECR_REGISTRY"
             echo "ECR_REPO=$ECR_REPO"
             echo "AWS_REGION=$AWS_REGION"
@@ -147,19 +151,18 @@ jobs:
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            echo "===== Pull Docker Images from ECR ====="
+            echo "===== Pulling Docker Images ====="
             docker pull $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
             docker pull $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-            echo "===== Deploy Containers via Docker Compose ====="
-            docker compose up -d --remove-orphans
+            echo "===== Deploying Containers ====="
+            docker compose --env-file .env up -d --remove-orphans
 
-            echo "===== List Running Containers ====="
+            echo "===== Running Containers ====="
             docker ps
 
             echo "===== Cleanup Unused Images ====="
             docker image prune -f
-
 
 
 
