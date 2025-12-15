@@ -90,17 +90,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Download docker-compose.yml
+      # 2️⃣ Download docker-compose.yml from CI
       - name: Download compose file
         uses: actions/download-artifact@v4
         with:
           name: compose
+          run-id: ${{ github.event.workflow_run.id }}
 
-      # 3️⃣ Download image tags
+      # 3️⃣ Download image tags from CI
       - name: Download image tags
         uses: actions/download-artifact@v4
         with:
           name: image-tags
+          run-id: ${{ github.event.workflow_run.id }}
 
       # 4️⃣ Load env + tags
       - name: Load environment
