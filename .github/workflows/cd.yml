@@ -130,7 +130,6 @@ jobs:
 
       # 6️⃣ SSH into EC2 and deploy
       - name: Deploy on EC2
-      - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
