@@ -99,7 +99,7 @@ on:
 permissions:
   id-token: write
   contents: read
-  actions: write
+  actions: write  # Required for upload-artifact
 
 jobs:
   build-and-push:
@@ -109,11 +109,11 @@ jobs:
       backend_tag: ${{ steps.set-tags.outputs.backend_tag }}
 
     steps:
-      # 1️⃣ Checkout repo
+      # 1️⃣ Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Load .env
+      # 2️⃣ Load environment variables from .env
       - name: Load environment variables
         run: |
           set -a
@@ -124,7 +124,7 @@ jobs:
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
 
-      # 3️⃣ Generate immutable image tags
+      # 3️⃣ Generate deterministic image tags
       - name: Generate image tags
         id: set-tags
         run: |
@@ -137,11 +137,11 @@ jobs:
           echo "frontend_tag=$FRONTEND_TAG" >> $GITHUB_OUTPUT
           echo "backend_tag=$BACKEND_TAG" >> $GITHUB_OUTPUT
 
-          # Save tags to file for CD
+          # Save to file for CD
           echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
           echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
 
-      # 4️⃣ Configure AWS credentials
+      # 4️⃣ Configure AWS credentials via OIDC
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -149,13 +149,27 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       # 5️⃣ Login to ECR
-      - name: Login to ECR
+      - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
       # 6️⃣ Build Docker images
-      - name: Build images
+      - name: Build Docker images
         run: |
-          doc
+          docker compose build frontend backend
+
+      # 7️⃣ Push images to ECR
+      - name: Push Docker images to ECR
+        run: |
+          docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
+          docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
+
+      # 8️⃣ Upload image-tags.env artifact for CD
+      - name: Upload image tags for CD
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-tags
+          path: image-tags.env
+
 
 
 
