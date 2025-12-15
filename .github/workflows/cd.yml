@@ -137,9 +137,9 @@ jobs:
       # 5️⃣ SSH into EC2 and deploy Docker images
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
-        envs: |
-          FRONTEND_TAG=${{ env.FRONTEND_TAG }}
-          BACKEND_TAG=${{ env.BACKEND_TAG }}
+        env:
+          FRONTEND_TAG: ${{ env.FRONTEND_TAG }}
+          BACKEND_TAG: ${{ env.BACKEND_TAG }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -174,7 +174,6 @@ jobs:
 
             echo "===== Cleanup Unused Images ====="
             docker image prune -f
-
 
 
 
