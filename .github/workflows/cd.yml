@@ -102,40 +102,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (needed for .env only)
+      # 1️⃣ Checkout repo (docker-compose.yml and .env)
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Download docker-compose.yml artifact from CI
-      - name: Download compose file
-        uses: actions/download-artifact@v4
-        with:
-          name: compose
-
-      # 3️⃣ Download image-tags artifact from CI
-      - name: Download image tags
-        uses: actions/download-artifact@v4
-        with:
-          name: image-tags
-
-      # 4️⃣ Load image tags into environment
-      - name: Load image tags
+      # 2️⃣ Load environment variables from .env
+      - name: Load environment variables
         run: |
           set -a
-          source image-tags.env
+          source .env
           set +a
-          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
-          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
+          echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
+          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      # 5️⃣ Deploy on EC2
+      # 3️⃣ Deploy on EC2
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-          ECR_REPO: ${{ secrets.ECR_REPO }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          FRONTEND_TAG: ${{ env.FRONTEND_TAG }}
-          BACKEND_TAG: ${{ env.BACKEND_TAG }}
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+          ECR_REPO: ${{ env.ECR_REPO }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          FRONTEND_TAG: ${{ github.event.workflow_run.outputs.frontend_tag || 'latest-frontend' }}
+          BACKEND_TAG: ${{ github.event.workflow_run.outputs.backend_tag || 'latest-backend' }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -159,7 +148,7 @@ jobs:
             docker pull $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
             docker pull $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-            echo "===== Deploying Containers (No Build) ====="
+            echo "===== Deploying Containers ====="
             docker compose --env-file .env up -d --remove-orphans
 
             echo "===== Running Containers ====="
@@ -167,10 +156,6 @@ jobs:
 
             echo "===== Cleanup Unused Images ====="
             docker image prune -f
-
-
-
-
 
 
 
