@@ -158,12 +158,24 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          
+
+
           script: |
             cd /home/${{ env.EC2_USER }}/app
             # Export environment variables for docker-compose
             export $(grep -v '^#' .env | xargs)
-            docker compose pull
-            docker compose up -d --remove-orphans
+            docker-compose pull
+            docker-compose up -d --remove-orphans
+
+
+
+          #script: |
+            #cd /home/${{ env.EC2_USER }}/app
+            ## Export environment variables for docker-compose
+            #export $(grep -v '^#' .env | xargs)
+            #docker compose pull
+            #docker compose up -d --remove-orphans
 
 
 
