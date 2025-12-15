@@ -34,7 +34,10 @@ jobs:
 
           echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
           echo "AWS_ROLE_TO_ASSUME=$AWS_ROLE_TO_ASSUME" >> $GITHUB_ENV
-          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV          
+          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV   
+          echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV    
+          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV  
+          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV      
 
       # 🔐 THIS is where AWS auth actually happens
       - name: Configure AWS credentials (OIDC)
@@ -49,14 +52,14 @@ jobs:
       - name: Build and Push Backend Image
         run: |
           docker build -t my-backend ./backend
-          docker tag my-backend:latest $ECR_REGISTRY/my-backend:latest
-          docker push $ECR_REGISTRY/my-backend:latest
+          docker tag my-backend:latest $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
+          docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
       - name: Build and Push Frontend Image
         run: |
           docker build -t my-frontend ./frontend
-          docker tag my-frontend:latest $ECR_REGISTRY/my-frontend:latest
-          docker push $ECR_REGISTRY/my-frontend:latest
+          docker tag my-frontend:latest $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
+          docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
 
       - name: Upload compose file
         uses: actions/upload-artifact@v4
