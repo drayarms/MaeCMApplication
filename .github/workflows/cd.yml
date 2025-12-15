@@ -138,6 +138,9 @@ jobs:
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         env:
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+          ECR_REPO: ${{ env.ECR_REPO }}
+          AWS_REGION: ${{ env.AWS_REGION }}
           FRONTEND_TAG: ${{ env.FRONTEND_TAG }}
           BACKEND_TAG: ${{ env.BACKEND_TAG }}
         with:
