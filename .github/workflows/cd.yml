@@ -94,20 +94,19 @@ on:
 
 permissions:
   contents: read
-  actions: read  # Required for workflow_run metadata
+  actions: read
 
 jobs:
   deploy:
-    # Only run if the triggering CI workflow succeeded
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository (needed for .env and docker-compose.yml)
+      # 1️⃣ Checkout repo (needed for .env and docker-compose.yml)
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Load environment variables
+      # 2️⃣ Load environment variables from .env
       - name: Load .env
         run: |
           set -a
@@ -117,7 +116,15 @@ jobs:
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
           echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      # 3️⃣ Upload files to EC2
+      # 3️⃣ Compute deterministic image tags in GitHub Actions
+      - name: Compute image tags
+        run: |
+          FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
+          BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
+          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
+          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+
+      # 4️⃣ Upload docker-compose.yml and .env to EC2
       - name: Upload files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -127,9 +134,12 @@ jobs:
           source: "docker-compose.yml,.env"
           target: "/home/${{ secrets.EC2_USER }}/app"
 
-      # 4️⃣ SSH into EC2 and deploy with full debug
+      # 5️⃣ SSH into EC2 and deploy Docker images
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
+        envs: |
+          FRONTEND_TAG=${{ env.FRONTEND_TAG }}
+          BACKEND_TAG=${{ env.BACKEND_TAG }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -138,22 +148,14 @@ jobs:
             APP_DIR="/home/${{ secrets.EC2_USER }}/app"
             cd $APP_DIR
 
-            echo "===== Loading Environment Variables ====="
-            set -a
-            [ -f .env ] && source .env
-            set +a
+            echo "===== Environment Variables ====="
             echo "ECR_REGISTRY=$ECR_REGISTRY"
             echo "ECR_REPO=$ECR_REPO"
             echo "AWS_REGION=$AWS_REGION"
-
-            echo "===== Computing Deterministic Image Tags ====="
-            FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
-            BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
             echo "FRONTEND_TAG=$FRONTEND_TAG"
             echo "BACKEND_TAG=$BACKEND_TAG"
 
             echo "===== Docker Login to ECR ====="
-            set -x
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
