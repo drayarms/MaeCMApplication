@@ -102,14 +102,17 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      frontend_tag: ${{ steps.set-tags.outputs.frontend_tag }}
+      backend_tag: ${{ steps.set-tags.outputs.backend_tag }}
 
     steps:
-      # 1️⃣ Checkout code
+      # 1️⃣ Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Load base env (no tags)
-      - name: Load base environment
+      # 2️⃣ Load base env
+      - name: Load base env
         run: |
           set -a
           source .env
@@ -122,6 +125,7 @@ jobs:
 
       # 3️⃣ Generate immutable tags
       - name: Generate image tags
+        id: set-tags
         run: |
           FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
           BACKEND_TAG=$(git rev-parse --short HEAD)-backend
@@ -129,9 +133,9 @@ jobs:
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
-          # Save tags for CD
-          echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
-          echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
+          # Set workflow outputs for CD
+          echo "frontend_tag=$FRONTEND_TAG" >> $GITHUB_OUTPUT
+          echo "backend_tag=$BACKEND_TAG" >> $GITHUB_OUTPUT
 
       # 4️⃣ AWS auth (OIDC)
       - name: Configure AWS credentials
@@ -144,23 +148,24 @@ jobs:
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 6️⃣ Build images (local tags resolved from compose)
-      - name: Build Docker images
+      # 6️⃣ Build images
+      - name: Build images
         run: |
           docker compose build frontend backend
 
       # 7️⃣ Push images to ECR
-      - name: Push Docker images
+      - name: Push images
         run: |
           docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
           docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-      # 8️⃣ Upload image tags for CD
-      - name: Upload image-tags artifact
+      # 8️⃣ Upload docker-compose.yml (optional for EC2)
+      - name: Upload compose file
         uses: actions/upload-artifact@v4
         with:
-          name: image-tags
-          path: image-tags.env
+          name: compose
+          path: docker-compose.yml
+
 
 
 
