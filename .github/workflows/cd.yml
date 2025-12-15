@@ -84,7 +84,6 @@
 
 
 
-
 name: CD-Deploy
 
 on:
@@ -94,53 +93,48 @@ on:
 
 permissions:
   contents: read
-  actions: read
+  actions: read  # Required to download artifacts
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push'
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (needed for .env and docker-compose.yml)
-      - name: Checkout
+      # 1️⃣ Checkout repo (needed for .env only)
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Load environment variables from .env
-      - name: Load .env
+      # 2️⃣ Download docker-compose.yml artifact from CI
+      - name: Download compose file
+        uses: actions/download-artifact@v4
+        with:
+          name: compose
+
+      # 3️⃣ Download image-tags artifact from CI
+      - name: Download image tags
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tags
+
+      # 4️⃣ Load image tags into environment
+      - name: Load image tags
         run: |
           set -a
-          [ -f .env ] && source .env
+          source image-tags.env
           set +a
-          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
-          echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
-          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
-
-      # 3️⃣ Compute deterministic image tags in GitHub Actions
-      - name: Compute image tags
-        run: |
-          FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
-          BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
-      # 4️⃣ Upload docker-compose.yml and .env to EC2
-      - name: Upload files to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml,.env"
-          target: "/home/${{ secrets.EC2_USER }}/app"
-
-      # 5️⃣ SSH into EC2 and deploy Docker images
+      # 5️⃣ Deploy on EC2
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         env:
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
-          ECR_REPO: ${{ env.ECR_REPO }}
-          AWS_REGION: ${{ env.AWS_REGION }}
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REPO: ${{ secrets.ECR_REPO }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
           FRONTEND_TAG: ${{ env.FRONTEND_TAG }}
           BACKEND_TAG: ${{ env.BACKEND_TAG }}
         with:
@@ -163,8 +157,8 @@ jobs:
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
             echo "===== Pulling Docker Images ====="
-            docker pull $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG || exit 1
-            docker pull $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG || exit 1
+            docker pull $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
+            docker pull $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
             echo "===== List Docker Images ====="
             docker images
@@ -177,11 +171,6 @@ jobs:
 
             echo "===== Cleanup Unused Images ====="
             docker image prune -f
-
-
-
-
-
 
 
 
