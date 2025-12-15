@@ -79,11 +79,10 @@ on:
 
 permissions:
   contents: read
-  actions: read   # REQUIRED to download artifacts
+  actions: read
 
 jobs:
   deploy:
-    # ✅ Only deploy successful PUSH-based CI runs (not PRs)
     if: >
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push'
@@ -91,25 +90,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (for .env only)
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # 2️⃣ Download docker-compose.yml artifact from CI
+      # 1️⃣ Download docker-compose.yml artifact
       - name: Download compose file
         uses: actions/download-artifact@v4
         with:
           name: compose
           run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3️⃣ Download image tags artifact from CI
+      # 2️⃣ Download image tags artifact
       - name: Download image tags
         uses: actions/download-artifact@v4
         with:
           name: image-tags
           run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 4️⃣ Load environment variables
+      # 3️⃣ Load environment variables
       - name: Load environment
         run: |
           set -a
@@ -124,7 +121,7 @@ jobs:
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
           echo "EC2_USER=$EC2_USER" >> $GITHUB_ENV
 
-      # 5️⃣ Upload compose + env files to EC2
+      # 4️⃣ Upload compose + env files to EC2
       - name: Upload compose to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -134,7 +131,7 @@ jobs:
           source: "docker-compose.yml,image-tags.env,.env"
           target: "/home/${{ env.EC2_USER }}/app"
 
-      # 6️⃣ SSH into EC2 and deploy
+      # 5️⃣ SSH into EC2 and deploy
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -154,6 +151,7 @@ jobs:
 
             docker compose pull
             docker compose up -d --remove-orphans
+
 
 
 
