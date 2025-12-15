@@ -75,8 +75,10 @@ name: CD-Deploy
 on:
   workflow_run:
     workflows: ["CI-Build"]
-    types:
-      - completed
+    types: [completed]
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
@@ -84,33 +86,65 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # 1️⃣ Checkout (only for compose)
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Load .env
+      # 2️⃣ Download docker-compose.yml
+      - name: Download compose file
+        uses: actions/download-artifact@v4
+        with:
+          name: compose
+
+      # 3️⃣ Download image tags
+      - name: Download image tags
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tags
+
+      # 4️⃣ Load env + tags
+      - name: Load environment
         run: |
           set -a
           source .env
+          source image-tags.env
           set +a
-          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
+
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
-
-      - name: Get image tags from the triggering workflow
-        run: |
-          FRONTEND_TAG=$(gh run view ${{ github.event.workflow_run.id }} --json jobs -q '.jobs[0].steps[] | select(.name=="Set image tags").outputs.FRONTEND_TAG')
-          BACKEND_TAG=$(gh run view ${{ github.event.workflow_run.id }} --json jobs -q '.jobs[0].steps[] | select(.name=="Set image tags").outputs.BACKEND_TAG')
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+          echo "EC2_USER=$EC2_USER" >> $GITHUB_ENV
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      # 5️⃣ Upload compose + env to EC2
+      - name: Upload compose to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_REGION }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.yml,image-tags.env,.env"
+          target: "/home/${{ env.EC2_USER }}/app"
 
-      - name: Deploy containers
-        run: |
-          docker compose pull
-          docker compose up -d
+      # 6️⃣ Deploy on EC2
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/${{ env.EC2_USER }}/app
+
+            set -a
+            source .env
+            source image-tags.env
+            set +a
+
+            aws ecr get-login-password --region $AWS_REGION \
+              | docker login --username AWS --password-stdin $ECR_REGISTRY
+
+            docker compose pull
+            docker compose up -d --remove-orphans
+
 
