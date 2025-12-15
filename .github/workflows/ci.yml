@@ -67,6 +67,10 @@ jobs:
           name: compose
           path: docker-compose.yml
 
+      - name: List artifacts #Verifies if workflow actually uploads artifacts
+        run: |
+          gh run artifacts          
+
 
 #source .env actually refers to $GITHUB_WORKSPACE/.env which is root of dir
 #$ECR_REGISTRY from .env
