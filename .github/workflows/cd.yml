@@ -130,26 +130,35 @@ jobs:
 
       # 6️⃣ SSH into EC2 and deploy
       - name: Deploy on EC2
+      - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/${{ secrets.EC2_USER }}/app
+            APP_DIR="/home/${{ secrets.EC2_USER }}/app"
+            cd $APP_DIR
 
-            # Load image tags only (avoid exposing .env secrets)
+            # Load environment variables from both files
             set -a
-            source image-tags.env
+            [ -f .env ] && source .env
+            [ -f image-tags.env ] && source image-tags.env
             set +a
 
-            # Authenticate Docker to ECR using EC2 IAM role
+            # Authenticate Docker to ECR
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            # Pull and deploy images
-            docker compose pull
-            docker compose up -d --remove-orphans
+            # Pull latest images from ECR
+            docker compose --env-file .env --env-file image-tags.env pull
+
+            # Deploy containers with minimal downtime
+            docker compose --env-file .env --env-file image-tags.env up -d --remove-orphans
+
+            # Optional: clean up unused images to save disk space
+            docker image prune -f
+
 
 
 
