@@ -99,19 +99,22 @@ on:
 permissions:
   id-token: write
   contents: read
-  actions: write  # Required for AWS actions
+  actions: write  # Required for upload-artifact
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      frontend_tag: ${{ steps.set-tags.outputs.frontend_tag }}
+      backend_tag: ${{ steps.set-tags.outputs.backend_tag }}
 
     steps:
-      # 1️⃣ Checkout
+      # 1️⃣ Checkout repo
       - name: Checkout
         uses: actions/checkout@v4
 
       # 2️⃣ Load base environment
-      - name: Load .env
+      - name: Load base env
         run: |
           set -a
           source .env
@@ -123,13 +126,23 @@ jobs:
 
       # 3️⃣ Generate deterministic image tags
       - name: Generate image tags
+        id: set-tags
         run: |
           FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
           BACKEND_TAG=$(git rev-parse --short HEAD)-backend
+
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
-      # 4️⃣ Configure AWS credentials (OIDC)
+          # Workflow outputs for CD
+          echo "frontend_tag=$FRONTEND_TAG" >> $GITHUB_OUTPUT
+          echo "backend_tag=$BACKEND_TAG" >> $GITHUB_OUTPUT
+
+          # Save to file for optional SCP to EC2
+          echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
+          echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
+
+      # 4️⃣ Configure AWS credentials via OIDC
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -145,10 +158,24 @@ jobs:
         run: docker compose build frontend backend
 
       # 7️⃣ Push Docker images to ECR
-      - name: Push Docker images
+      - name: Push images
         run: |
           docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
           docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
+
+      # 8️⃣ Upload docker-compose.yml for CD (optional)
+      - name: Upload docker-compose.yml
+        uses: actions/upload-artifact@v4
+        with:
+          name: compose
+          path: docker-compose.yml
+
+      # 9️⃣ Upload image-tags.env for CD
+      - name: Upload image-tags
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-tags
+          path: image-tags.env
 
 
 
