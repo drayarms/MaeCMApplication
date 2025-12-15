@@ -12,55 +12,12 @@
     #runs-on: ubuntu-latest
 
     #steps:
-      #- name: Download compose artifact
-        #uses: actions/download-artifact@v4
-        #with:
-          #name: compose
-          #path: ./deploy
-
-      #- name: Upload compose to EC2
-        #uses: appleboy/scp-action@v0.1.7
-        #with:
-          #host: ${{ secrets.EC2_HOST }}
-          #username: $EC2_USER
-          #key: ${{ secrets.EC2_SSH_KEY }}
-          #source: "./deploy/docker-compose.yml"
-          #target: "/home/ec2-user/app"
-
-      #- name: SSH and redeploy
-        #uses: appleboy/ssh-action@v0.1.10
-        #with:
-          #host: ${{ secrets.EC2_HOST }}
-          #username: $EC2_USER
-          #key: ${{ secrets.EC2_SSH_KEY }}
-          #script: |
-            #cd /home/ec2-user/app
-            #docker compose pull
-            #docker compose up -d --remove-orphans
-
-
-
-
-#name: CD-Deploy
-
-#on:
-  #workflow_run:
-    #workflows: ["CI-Build"]
-    #types:
-      #- completed
-
-#jobs:
-  #deploy:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    #runs-on: ubuntu-latest
-
-    #steps:
-      ## 1️⃣ Checkout repo so .env exists in runner workspace
-      #- name: Checkout
+      ## 1️⃣ Checkout repo so .env and docker-compose.yml exist
+      #- name: Checkout repo
         #uses: actions/checkout@v4
 
       ## 2️⃣ Load .env into GitHub Actions environment
-      #- name: Load environment variables from .env
+      #- name: Load environment variables
         #run: |
           #set -a
           #source .env
@@ -68,32 +25,46 @@
 
           ## Export explicitly to GitHub Actions env context
           #echo "EC2_USER=$EC2_USER" >> $GITHUB_ENV
+          #echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
+          #echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
+          #echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
+          #echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+          #echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      ## 3️⃣ Download docker-compose artifact from CI
-      #- name: Download compose artifact
-        #uses: actions/download-artifact@v4
-        #with:
-          #name: compose
-          #path: ./deploy
-
-      ## 4️⃣ Upload docker-compose.yml to EC2
+      ## 3️⃣ Upload docker-compose.yml to EC2
       #- name: Upload compose to EC2
         #uses: appleboy/scp-action@v0.1.7
         #with:
           #host: ${{ secrets.EC2_HOST }}
           #username: ${{ env.EC2_USER }}
           #key: ${{ secrets.EC2_SSH_KEY }}
-          #source: "./deploy/docker-compose.yml"
+          #source: "docker-compose.yml"
+          #target: "/home/${{ env.EC2_USER }}/app"
+
+      ## 4️⃣ Upload .env to EC2
+      #- name: Upload .env to EC2
+        #uses: appleboy/scp-action@v0.1.7
+        #with:
+          #host: ${{ secrets.EC2_HOST }}
+          #username: ${{ env.EC2_USER }}
+          #key: ${{ secrets.EC2_SSH_KEY }}
+          #source: ".env"
           #target: "/home/${{ env.EC2_USER }}/app"
 
       ## 5️⃣ SSH into EC2 and deploy
       #- name: SSH and redeploy
         #uses: appleboy/ssh-action@v0.1.10
         #with:
+          #host: ${{ secrets.EC2_HOST }}
           #username: ${{ env.EC2_USER }}
           #key: ${{ secrets.EC2_SSH_KEY }}
           #script: |
             #cd /home/${{ env.EC2_USER }}/app
+            # Export environment variables for docker-compose
+            #export $(grep -v '^#' .env | xargs)
+
+            #aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+
             #docker compose pull
             #docker compose up -d --remove-orphans
 
@@ -113,46 +84,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo so .env and docker-compose.yml exist
+      # 1️⃣ Checkout repo for .env and docker-compose.yml
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Load .env into GitHub Actions environment
+      # 2️⃣ Load environment variables
       - name: Load environment variables
         run: |
           set -a
           source .env
           set +a
-
-          # Export explicitly to GitHub Actions env context
           echo "EC2_USER=$EC2_USER" >> $GITHUB_ENV
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      # 3️⃣ Upload docker-compose.yml to EC2
-      - name: Upload compose to EC2
+      # 3️⃣ Upload docker-compose.yml and .env to EC2
+      - name: Upload compose and .env
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml"
+          source: |
+            docker-compose.yml
+            .env
           target: "/home/${{ env.EC2_USER }}/app"
 
-      # 4️⃣ Upload .env to EC2
-      - name: Upload .env to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ env.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: ".env"
-          target: "/home/${{ env.EC2_USER }}/app"
-
-      # 5️⃣ SSH into EC2 and deploy
-      - name: SSH and redeploy
+      # 4️⃣ SSH into EC2, login to ECR, pull images, deploy
+      - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -160,10 +122,18 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/${{ env.EC2_USER }}/app
+            # Login to ECR
+            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
             # Export environment variables for docker-compose
             export $(grep -v '^#' .env | xargs)
+            # Pull pre-built images
             docker compose pull
+            # Deploy
             docker compose up -d --remove-orphans
+
+
+
+
 
 
 
