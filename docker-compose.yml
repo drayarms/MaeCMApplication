@@ -26,28 +26,51 @@
       #- backend
 
 
-version: "3.8"
+#version: "3.8"
+
+#services:
+  #frontend:
+    #image: ${ECR_REGISTRY}/${ECR_REPO}:${FRONTEND_TAG} #${ECR_REGISTRY}, {ECR_REPO}, {FRONTEND_TAG} defined in .env
+    #build:
+      #context: ./frontend
+      #dockerfile: Dockerfile
+    #container_name: react-frontend
+    #ports:
+      #- "80:80"
+    #restart: unless-stopped
+
+  #backend:
+    #image: ${ECR_REGISTRY}/${ECR_REPO}:${BACKEND_TAG}
+    #build:
+      #context: ./backend
+      #dockerfile: Dockerfile
+    #container_name: flask-backend
+    #ports:
+      #- "5000:5000"
+    #restart: unless-stopped
+
 
 services:
   frontend:
-    image: ${ECR_REGISTRY}/${ECR_REPO}:${FRONTEND_TAG} #${ECR_REGISTRY}, {ECR_REPO}, {FRONTEND_TAG} defined in .env
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: ${ECR_REGISTRY}/${ECR_REPO}:${FRONTEND_TAG}
     container_name: react-frontend
     ports:
       - "80:80"
     restart: unless-stopped
 
   backend:
-    image: ${ECR_REGISTRY}/${ECR_REPO}:${BACKEND_TAG}
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: ${ECR_REGISTRY}/${ECR_REPO}:${BACKEND_TAG}
     container_name: flask-backend
     ports:
       - "5000:5000"
     restart: unless-stopped
+    
 
 
 #Optional in case your don't want to use the default network automatically created for the above services

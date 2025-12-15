@@ -132,9 +132,4 @@ jobs:
             docker compose up -d --remove-orphans
 
 
-
-
-
-
-
 #name compose defined in ci.yml under Upload compose file  haha
