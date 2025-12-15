@@ -90,23 +90,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (for .env only)
+      # 1️⃣ Checkout repo (needed only for .env if used locally)
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Download docker-compose.yml artifact
+      # 2️⃣ Download docker-compose.yml artifact from CI
       - name: Download compose file
         uses: actions/download-artifact@v4
         with:
-          name: compose
-          run-id: ${{ github.event.workflow_run.id }}
+          name: compose  # No run-id needed; downloads the latest artifact from the triggering workflow
 
-      # 3️⃣ Download image-tags artifact
+      # 3️⃣ Download image-tags artifact from CI
       - name: Download image tags
         uses: actions/download-artifact@v4
         with:
-          name: image-tags
-          run-id: ${{ github.event.workflow_run.id }}
+          name: image-tags  # No run-id needed
 
       # 4️⃣ Load image tags into environment
       - name: Load image tags
@@ -140,7 +138,7 @@ jobs:
           script: |
             cd /home/${{ secrets.EC2_USER }}/app
 
-            # Load image tags only (avoid .env secrets in workflow)
+            # Load image tags only
             set -a
             source image-tags.env
             set +a
@@ -149,9 +147,10 @@ jobs:
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            # Pull and deploy images
+            # Pull and deploy containers
             docker compose pull
             docker compose up -d --remove-orphans
+
 
 
 
