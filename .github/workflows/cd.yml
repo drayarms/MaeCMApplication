@@ -79,32 +79,37 @@ on:
 
 permissions:
   contents: read
+  actions: read   # REQUIRED to download artifacts
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # ✅ Only deploy successful PUSH-based CI runs (not PRs)
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push'
+
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout (only for compose)
+      # 1️⃣ Checkout repo (for .env only)
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Download docker-compose.yml from CI
+      # 2️⃣ Download docker-compose.yml artifact from CI
       - name: Download compose file
         uses: actions/download-artifact@v4
         with:
           name: compose
           run-id: ${{ github.event.workflow_run.id }}
 
-      # 3️⃣ Download image tags from CI
+      # 3️⃣ Download image tags artifact from CI
       - name: Download image tags
         uses: actions/download-artifact@v4
         with:
           name: image-tags
           run-id: ${{ github.event.workflow_run.id }}
 
-      # 4️⃣ Load env + tags
+      # 4️⃣ Load environment variables
       - name: Load environment
         run: |
           set -a
@@ -112,13 +117,14 @@ jobs:
           source image-tags.env
           set +a
 
+          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
           echo "EC2_USER=$EC2_USER" >> $GITHUB_ENV
 
-      # 5️⃣ Upload compose + env to EC2
+      # 5️⃣ Upload compose + env files to EC2
       - name: Upload compose to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -128,8 +134,8 @@ jobs:
           source: "docker-compose.yml,image-tags.env,.env"
           target: "/home/${{ env.EC2_USER }}/app"
 
-      # 6️⃣ Deploy on EC2
-      - name: SSH and deploy
+      # 6️⃣ SSH into EC2 and deploy
+      - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -148,5 +154,6 @@ jobs:
 
             docker compose pull
             docker compose up -d --remove-orphans
+
 
 
