@@ -84,11 +84,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout code
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Load environment variables
       - name: Load .env
         run: |
           set -a
@@ -98,22 +96,19 @@ jobs:
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
 
-      # 3️⃣ Get tags from the triggering workflow run
-      - name: Get image tags
+      - name: Get image tags from the triggering workflow
         run: |
-          FRONTEND_TAG=$(gh run view ${{ github.event.workflow_run.id }} --json artifacts -q '.artifacts[0].name' | grep frontend || echo "latest-frontend")
-          BACKEND_TAG=$(gh run view ${{ github.event.workflow_run.id }} --json artifacts -q '.artifacts[0].name' | grep backend || echo "latest-backend")
+          FRONTEND_TAG=$(gh run view ${{ github.event.workflow_run.id }} --json jobs -q '.jobs[0].steps[] | select(.name=="Set image tags").outputs.FRONTEND_TAG')
+          BACKEND_TAG=$(gh run view ${{ github.event.workflow_run.id }} --json jobs -q '.jobs[0].steps[] | select(.name=="Set image tags").outputs.BACKEND_TAG')
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
-      # 4️⃣ Configure AWS credentials (if deploying to an EC2 host or ECS)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # 5️⃣ Pull and run the new images
       - name: Deploy containers
         run: |
           docker compose pull

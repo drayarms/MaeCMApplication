@@ -76,7 +76,7 @@ on:
     branches: [main]
 
 permissions:
-  id-token: write  # REQUIRED for OIDC
+  id-token: write
   contents: read
 
 jobs:
@@ -84,11 +84,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout code
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Load environment variables
       - name: Load .env
         run: |
           set -a
@@ -99,7 +97,6 @@ jobs:
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
 
-      # 3️⃣ Generate unique tags using short commit SHA
       - name: Set image tags
         run: |
           FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
@@ -107,32 +104,22 @@ jobs:
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
-      # 4️⃣ Configure AWS credentials (OIDC)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # 5️⃣ Login to ECR
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 6️⃣ Build images
-      - name: Build Docker images
+      - name: Build & push Docker images
         run: |
           docker compose build frontend backend
+          docker compose push frontend
+          docker compose push backend
 
-      # 7️⃣ Tag & push images to ECR
-      - name: Tag & push images
-        run: |
-          docker tag react-frontend $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
-          docker tag flask-backend $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
-          docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
-          docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
-
-      # 8️⃣ Upload docker-compose.yml as artifact
-      - name: Upload docker-compose.yml
+      - name: Upload docker-compose.yml artifact
         uses: actions/upload-artifact@v4
         with:
           name: compose
