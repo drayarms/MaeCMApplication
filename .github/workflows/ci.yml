@@ -99,14 +99,11 @@ on:
 permissions:
   id-token: write
   contents: read
-  actions: write  # Required for upload-artifact
+  actions: write  # Required for AWS actions
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    outputs:
-      frontend_tag: ${{ steps.set-tags.outputs.frontend_tag }}
-      backend_tag: ${{ steps.set-tags.outputs.backend_tag }}
 
     steps:
       # 1️⃣ Checkout
@@ -114,34 +111,23 @@ jobs:
         uses: actions/checkout@v4
 
       # 2️⃣ Load base environment
-      - name: Load base env
+      - name: Load .env
         run: |
           set -a
           source .env
           set +a
-
           echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
           echo "AWS_ROLE_TO_ASSUME=$AWS_ROLE_TO_ASSUME" >> $GITHUB_ENV
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
 
-      # 3️⃣ Generate immutable image tags
+      # 3️⃣ Generate deterministic image tags
       - name: Generate image tags
-        id: set-tags
         run: |
           FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
           BACKEND_TAG=$(git rev-parse --short HEAD)-backend
-
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
-
-          # Set workflow outputs for CD
-          echo "frontend_tag=$FRONTEND_TAG" >> $GITHUB_OUTPUT
-          echo "backend_tag=$BACKEND_TAG" >> $GITHUB_OUTPUT
-
-          # Save to file for CD artifact
-          echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
-          echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
 
       # 4️⃣ Configure AWS credentials (OIDC)
       - name: Configure AWS credentials
@@ -155,28 +141,14 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       # 6️⃣ Build Docker images
-      - name: Build images
+      - name: Build Docker images
         run: docker compose build frontend backend
 
-      # 7️⃣ Push images to ECR
-      - name: Push images
+      # 7️⃣ Push Docker images to ECR
+      - name: Push Docker images
         run: |
           docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
           docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
-
-      # 8️⃣ Upload docker-compose.yml artifact for CD
-      - name: Upload compose file
-        uses: actions/upload-artifact@v4
-        with:
-          name: compose
-          path: docker-compose.yml
-
-      # 9️⃣ Upload image-tags.env artifact for CD
-      - name: Upload image tags
-        uses: actions/upload-artifact@v4
-        with:
-          name: image-tags
-          path: image-tags.env
 
 
 

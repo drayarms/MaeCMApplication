@@ -73,61 +73,50 @@
 name: CD-Deploy
 
 on:
-  workflow_run:
-    workflows: ["CI-Build"]
-    types: [completed]
+  push:
+    branches: [main]
 
 permissions:
   contents: read
-  actions: read  # Required to download artifacts
 
 jobs:
   deploy:
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push'
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (needed for .env only)
+      # 1️⃣ Checkout repo (needed for .env and docker-compose.yml)
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Download docker-compose.yml artifact from the triggering CI workflow
-      - name: Download compose file
-        uses: actions/download-artifact@v4
-        with:
-          name: compose
-
-      # 3️⃣ Download image-tags artifact from the triggering CI workflow
-      - name: Download image tags
-        uses: actions/download-artifact@v4
-        with:
-          name: image-tags
-
-      # 4️⃣ Load image tags into environment
-      - name: Load image tags
+      # 2️⃣ Load environment variables
+      - name: Load .env
         run: |
           set -a
-          source image-tags.env
+          source .env
           set +a
-
-          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
-          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
+          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      # 5️⃣ Upload files to EC2
+      # 3️⃣ Recompute deterministic image tags
+      - name: Compute image tags
+        run: |
+          FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
+          BACKEND_TAG=$(git rev-parse --short HEAD)-backend
+          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
+          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+
+      # 4️⃣ Upload files to EC2
       - name: Upload files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml,image-tags.env,.env"
+          source: "docker-compose.yml,.env"
           target: "/home/${{ secrets.EC2_USER }}/app"
 
-      # 6️⃣ SSH into EC2 and deploy
+      # 5️⃣ SSH into EC2 and deploy
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -138,23 +127,23 @@ jobs:
             APP_DIR="/home/${{ secrets.EC2_USER }}/app"
             cd $APP_DIR
 
-            # Load environment variables from both files
+            # Load env variables
             set -a
             [ -f .env ] && source .env
-            [ -f image-tags.env ] && source image-tags.env
             set +a
+
+            # Use deterministic image tags
+            FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
+            BACKEND_TAG=$(git rev-parse --short HEAD)-backend
 
             # Authenticate Docker to ECR
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            # Pull latest images from ECR
-            docker compose --env-file .env --env-file image-tags.env pull
+            # Pull and deploy images
+            docker compose --env-file .env up -d --remove-orphans
 
-            # Deploy containers with minimal downtime
-            docker compose --env-file .env --env-file image-tags.env up -d --remove-orphans
-
-            # Optional: clean up unused images
+            # Optional cleanup
             docker image prune -f
 
 
