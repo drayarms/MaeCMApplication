@@ -73,14 +73,18 @@
 name: CD-Deploy
 
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["CI-Build"]
+    types: [completed]
 
 permissions:
   contents: read
+  actions: read  # Needed to download workflow metadata if necessary
 
 jobs:
   deploy:
+    # Run only if the triggering CI workflow succeeded
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
 
     steps:
@@ -98,11 +102,11 @@ jobs:
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
           echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      # 3️⃣ Recompute deterministic image tags
+      # 3️⃣ Recompute deterministic image tags based on commit SHA
       - name: Compute image tags
         run: |
-          FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
-          BACKEND_TAG=$(git rev-parse --short HEAD)-backend
+          FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
+          BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
 
@@ -133,18 +137,22 @@ jobs:
             set +a
 
             # Use deterministic image tags
-            FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
-            BACKEND_TAG=$(git rev-parse --short HEAD)-backend
+            FRONTEND_TAG=$(git rev-parse --short $GITHUB_SHA)-frontend
+            BACKEND_TAG=$(git rev-parse --short $GITHUB_SHA)-backend
 
             # Authenticate Docker to ECR
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            # Pull and deploy images
+            # Pull images from ECR
+            docker compose --env-file .env pull
+
+            # Deploy containers
             docker compose --env-file .env up -d --remove-orphans
 
             # Optional cleanup
             docker image prune -f
+
 
 
 
