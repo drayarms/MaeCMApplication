@@ -83,7 +83,6 @@
             #docker image prune -f
 
 
-
 name: CD-Deploy
 
 on:
@@ -160,10 +159,7 @@ jobs:
             docker pull $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
             docker pull $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-            echo "===== List Docker Images ====="
-            docker images
-
-            echo "===== Deploying Containers ====="
+            echo "===== Deploying Containers (No Build) ====="
             docker compose --env-file .env up -d --remove-orphans
 
             echo "===== Running Containers ====="
@@ -171,6 +167,7 @@ jobs:
 
             echo "===== Cleanup Unused Images ====="
             docker image prune -f
+
 
 
 
