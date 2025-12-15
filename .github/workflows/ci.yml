@@ -194,14 +194,20 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
           docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-      # 8️⃣ Upload compose file
-      - name: Upload docker-compose.yml
+      # 8️⃣ Save image tags for CD
+      - name: Save image tags
+        run: |
+          echo "FRONTEND_TAG=$FRONTEND_TAG" > image-tags.env
+          echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
+
+      # 9️⃣ Upload docker-compose.yml
+      - name: Upload compose file
         uses: actions/upload-artifact@v4
         with:
           name: compose
           path: docker-compose.yml
 
-      # 9️⃣ Upload image tags
+      # 🔟 Upload image tags
       - name: Upload image tags
         uses: actions/upload-artifact@v4
         with:
