@@ -89,44 +89,55 @@ jobs:
         uses: actions/checkout@v4
 
       # 2️⃣ Load environment variables
-      - name: Load environment variables
+      - name: Load .env
         run: |
           set -a
           source .env
           set +a
           echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
           echo "AWS_ROLE_TO_ASSUME=$AWS_ROLE_TO_ASSUME" >> $GITHUB_ENV
-          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV   
-          echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV    
-          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV  
-          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
+          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
+          echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
 
-      # 3️⃣ Configure AWS
-      - name: Configure AWS credentials (OIDC)
+      # 3️⃣ Generate unique tags using short commit SHA
+      - name: Set image tags
+        run: |
+          FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
+          BACKEND_TAG=$(git rev-parse --short HEAD)-backend
+          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
+          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+
+      # 4️⃣ Configure AWS credentials (OIDC)
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # 4️⃣ Login to ECR
+      # 5️⃣ Login to ECR
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 5️⃣ Build & push images
-      - name: Build and push images
+      # 6️⃣ Build images
+      - name: Build Docker images
         run: |
-          docker compose build
-          docker tag frontend:latest $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
-          docker tag backend:latest $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
+          docker compose build frontend backend
+
+      # 7️⃣ Tag & push images to ECR
+      - name: Tag & push images
+        run: |
+          docker tag react-frontend $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
+          docker tag flask-backend $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
           docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
           docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-      # 6️⃣ Upload docker-compose.yml as artifact
-      - name: Upload compose file
+      # 8️⃣ Upload docker-compose.yml as artifact
+      - name: Upload docker-compose.yml
         uses: actions/upload-artifact@v4
         with:
           name: compose
           path: docker-compose.yml
+
 
 
 

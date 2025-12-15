@@ -84,52 +84,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo for .env and docker-compose.yml
-      - name: Checkout repo
+      # 1️⃣ Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       # 2️⃣ Load environment variables
-      - name: Load environment variables
+      - name: Load .env
         run: |
           set -a
           source .env
           set +a
-          echo "EC2_USER=$EC2_USER" >> $GITHUB_ENV
+          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
+
+      # 3️⃣ Get tags from the triggering workflow run
+      - name: Get image tags
+        run: |
+          FRONTEND_TAG=$(gh run view ${{ github.event.workflow_run.id }} --json artifacts -q '.artifacts[0].name' | grep frontend || echo "latest-frontend")
+          BACKEND_TAG=$(gh run view ${{ github.event.workflow_run.id }} --json artifacts -q '.artifacts[0].name' | grep backend || echo "latest-backend")
           echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
           echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
-          echo "AWS_REGION=$AWS_REGION" >> $GITHUB_ENV
 
-      # 3️⃣ Upload docker-compose.yml and .env to EC2
-      - name: Upload compose and .env
-        uses: appleboy/scp-action@v0.1.7
+      # 4️⃣ Configure AWS credentials (if deploying to an EC2 host or ECS)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ env.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: |
-            docker-compose.yml
-            .env
-          target: "/home/${{ env.EC2_USER }}/app"
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      # 4️⃣ SSH into EC2, login to ECR, pull images, deploy
-      - name: SSH and deploy
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ env.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd /home/${{ env.EC2_USER }}/app
-            # Login to ECR
-            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
-            # Export environment variables for docker-compose
-            export $(grep -v '^#' .env | xargs)
-            # Pull pre-built images
-            docker compose pull
-            # Deploy
-            docker compose up -d --remove-orphans
+      # 5️⃣ Pull and run the new images
+      - name: Deploy containers
+        run: |
+          docker compose pull
+          docker compose up -d
 
-
-#name compose defined in ci.yml under Upload compose file  haha
