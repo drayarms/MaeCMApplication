@@ -91,50 +91,77 @@ name: CI-Build
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main"]
 
 permissions:
   contents: read
-  actions: write  # needed for uploading artifacts
+  actions: write  # Needed to upload artifacts
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       # 1️⃣ Checkout repository
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Set deterministic image tags
-      - name: Set image tags
+      # 2️⃣ Set environment variables
+      - name: Set environment
         run: |
-          echo "FRONTEND_TAG=${GITHUB_SHA}-frontend" > image-tags.env
-          echo "BACKEND_TAG=${GITHUB_SHA}-backend" >> image-tags.env
+          echo "ECR_REGISTRY=${{ secrets.ECR_REGISTRY }}" >> $GITHUB_ENV
+          echo "ECR_REPO=${{ secrets.ECR_REPO }}" >> $GITHUB_ENV
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
 
-      # 3️⃣ Login to ECR
-      - name: AWS ECR Login
-        uses: aws-actions/amazon-ecr-login@v2
+      # 3️⃣ Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          registry: ${{ secrets.ECR_REGISTRY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      # 4️⃣ Build and push frontend
-      - name: Build and push frontend
+      # 4️⃣ Build and tag frontend image
+      - name: Build frontend Docker image
         run: |
-          docker build -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPO }}:${FRONTEND_TAG} ./frontend
-          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPO }}:${FRONTEND_TAG}
+          FRONTEND_TAG=$(git rev-parse --short HEAD)-frontend
+          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
+          docker build -t $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG ./frontend
 
-      # 5️⃣ Build and push backend
-      - name: Build and push backend
+      # 5️⃣ Build and tag backend image
+      - name: Build backend Docker image
         run: |
-          docker build -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPO }}:${BACKEND_TAG} ./backend
-          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPO }}:${BACKEND_TAG}
+          BACKEND_TAG=$(git rev-parse --short HEAD)-backend
+          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
+          docker build -t $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG ./backend
 
-      # 6️⃣ Upload image-tags artifact for CD
+      # 6️⃣ Push images to ECR
+      - name: Push images to ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION \
+            | docker login --username AWS --password-stdin $ECR_REGISTRY
+          docker push $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
+          docker push $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
+
+      # 7️⃣ Save image tags for CD workflow
+      - name: Create image-tags.env
+        run: |
+          echo "FRONTEND_TAG=$FRONTEND_TAG" >> image-tags.env
+          echo "BACKEND_TAG=$BACKEND_TAG" >> image-tags.env
+
+      # 8️⃣ Upload docker-compose.yml as artifact
+      - name: Upload docker-compose artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compose
+          path: docker-compose.yml
+
+      # 9️⃣ Upload image-tags.env as artifact
       - name: Upload image-tags artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: image-tags
           path: image-tags.env
+
 
 
 
