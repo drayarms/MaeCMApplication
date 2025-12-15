@@ -99,44 +99,30 @@ jobs:
     if: >
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push'
-
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (for .env only)
+      # 1️⃣ Checkout repo (docker-compose.yml is already in repo)
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Download docker-compose.yml artifact (optional)
-      - name: Download compose file
-        uses: actions/download-artifact@v4
+      # 2️⃣ Upload .env and image-tags.env to EC2
+      - name: Upload files to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
-          name: compose
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: ".env,image-tags.env,docker-compose.yml"
+          target: "/home/${{ secrets.EC2_USER }}/app"
 
-      # 3️⃣ Download image-tags artifact
-      - name: Download image tags
-        uses: actions/download-artifact@v4
-        with:
-          name: image-tags
-
-      # 4️⃣ Load image tags into environment
-      - name: Load image tags
-        run: |
-          set -a
-          source image-tags.env
-          set +a
-          echo "FRONTEND_TAG=$FRONTEND_TAG" >> $GITHUB_ENV
-          echo "BACKEND_TAG=$BACKEND_TAG" >> $GITHUB_ENV
-
-      # 5️⃣ Deploy and verify on EC2
-      - name: Deploy and verify on EC2
+      # 3️⃣ SSH into EC2 and deploy images from ECR
+      - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         env:
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
-          ECR_REPO: ${{ env.ECR_REPO }}
-          AWS_REGION: ${{ env.AWS_REGION }}
-          FRONTEND_TAG: ${{ env.FRONTEND_TAG }}
-          BACKEND_TAG: ${{ env.BACKEND_TAG }}
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REPO: ${{ secrets.ECR_REPO }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -145,22 +131,35 @@ jobs:
             APP_DIR="/home/${{ secrets.EC2_USER }}/app"
             cd $APP_DIR
 
+            echo "===== Load Environment Variables ====="
+            set -a
+            [ -f .env ] && source .env
+            [ -f image-tags.env ] && source image-tags.env
+            set +a
+
+            echo "ECR_REGISTRY=$ECR_REGISTRY"
+            echo "ECR_REPO=$ECR_REPO"
+            echo "AWS_REGION=$AWS_REGION"
+            echo "FRONTEND_TAG=$FRONTEND_TAG"
+            echo "BACKEND_TAG=$BACKEND_TAG"
+
             echo "===== Docker Login to ECR ====="
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            echo "===== Pulling Docker Images ====="
+            echo "===== Pull Docker Images from ECR ====="
             docker pull $ECR_REGISTRY/$ECR_REPO:$FRONTEND_TAG
             docker pull $ECR_REGISTRY/$ECR_REPO:$BACKEND_TAG
 
-            echo "===== Deploying Containers ====="
-            docker compose --env-file .env up -d --remove-orphans
+            echo "===== Deploy Containers via Docker Compose ====="
+            docker compose up -d --remove-orphans
 
-            echo "===== Verification ====="
-            docker images | grep -E "$FRONTEND_TAG|$BACKEND_TAG"
-            docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}" | grep -E "react-frontend|flask-backend"
+            echo "===== List Running Containers ====="
+            docker ps
 
-            echo "✅ Deployment completed successfully!"
+            echo "===== Cleanup Unused Images ====="
+            docker image prune -f
+
 
 
 
