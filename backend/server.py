@@ -58,6 +58,8 @@ if __name__ == "__main__":
 #Fixed pass key in secrets
 
 
+#FOR DEV SERVER
+"""
 from flask import Flask, send_from_directory, jsonify
 import os
 from flask_cors import CORS
@@ -83,5 +85,21 @@ def serve(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+"""
+
+
+#FOR PROD. ONLY SERVES API. NGINX WILL SERVE FRONTEND
+from flask import Flask, jsonify
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+@app.route("/api/hello")
+def hello():
+    return jsonify({"message": "Hello from Flask API!"})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
 
 
