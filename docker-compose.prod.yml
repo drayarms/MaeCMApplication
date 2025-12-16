@@ -1,0 +1,25 @@
+#EC2 Deployment
+version: "3.9"
+
+services:
+  ${FLASK_SERVICE}:
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${FLASK_APP}:latest
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  ${REACT_SERVICE}:
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REACT_APP}:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - ${FLASK_SERVICE}
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
