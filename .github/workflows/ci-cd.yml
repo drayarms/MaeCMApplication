@@ -61,7 +61,7 @@ jobs:
       # ----------------------------
       - name: Build images
         run: |
-          docker compose build frontend backend
+          docker compose build react flask
 
       # ----------------------------
       # Tag & Push images (immutable)

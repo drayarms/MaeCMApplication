@@ -2,7 +2,7 @@
 version: "3.9"
 
 services:
-  flask:
+  flask: #Service name used as arg by docker compose and build
     image: ${FLASK_APP}:latest
     build:
       context: ./backend
@@ -15,7 +15,7 @@ services:
     environment:
       FLASK_ENV: production
 
-  react:
+  react: #Service name used as arg by docker compose and build
     image: ${REACT_APP}:latest
     build:
       context: ./frontend
@@ -33,3 +33,5 @@ services:
 networks:
   app-network:
     driver: bridge
+
+
