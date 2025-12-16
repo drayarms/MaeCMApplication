@@ -33,10 +33,11 @@ jobs:
           echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
           echo "REACT_REPO=$REACT_REPO" >> $GITHUB_ENV
           echo "FLASK_REPO=$FLASK_REPO" >> $GITHUB_ENV
-          echo "AWS_ROLE_TO_ASSUME" >> $GITHUB_ENV
+          echo "AWS_ROLE_TO_ASSUME=$AWS_ROLE_TO_ASSUME" >> $GITHUB_ENV
 
           IMAGE_TAG=$(git rev-parse --short HEAD)
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
 
       # ----------------------------
       # Configure AWS (OIDC)
@@ -44,7 +45,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: AWS_ROLE_TO_ASSUME
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
       # ----------------------------
