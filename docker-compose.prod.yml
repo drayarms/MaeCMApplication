@@ -2,7 +2,7 @@
 version: "3.9"
 
 services:
-  ${FLASK_SERVICE}:
+  flask:
     image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${FLASK_APP}:latest
     ports:
       - "5000:5000"
@@ -10,12 +10,12 @@ services:
     networks:
       - app-network
 
-  ${REACT_SERVICE}:
+  react:
     image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REACT_APP}:latest
     ports:
       - "80:80"
     depends_on:
-      - ${FLASK_SERVICE}
+      - flask
     restart: unless-stopped
     networks:
       - app-network

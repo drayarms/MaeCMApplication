@@ -2,7 +2,7 @@
 version: "3.9"
 
 services:
-  ${FLASK_SERVICE}:
+  flask:
     image: ${FLASK_APP}:latest
     build:
       context: ./backend
@@ -15,7 +15,7 @@ services:
     environment:
       FLASK_ENV: production
 
-  ${REACT_SERVICE}:
+  react:
     image: ${REACT_APP}:latest
     build:
       context: ./frontend
@@ -25,7 +25,7 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - ${FLASK_SERVICE}
+      - flask
     restart: unless-stopped
     networks:
       - app-network
