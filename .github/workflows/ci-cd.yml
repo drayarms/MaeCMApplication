@@ -71,7 +71,7 @@ jobs:
       # Upload docker-compose files to EC2
       # ----------------------------
       - name: Upload docker-compose files to EC2
-        uses: appleboy/scp-action@v0.1.10
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -83,7 +83,7 @@ jobs:
       # Create .env directly on EC2
       # ----------------------------
       - name: Create .env on EC2
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -102,7 +102,7 @@ jobs:
       # Deploy services on EC2
       # ----------------------------
       - name: Deploy on EC2
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
