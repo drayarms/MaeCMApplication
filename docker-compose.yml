@@ -4,7 +4,7 @@ version: "3.9"
 services:
   flask: #Service name used as arg by docker compose and build and also as proxy pass in nginx.conf
     #image: ${FLASK_APP}:latest
-    image: react-app:latest
+    image: flask-app:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -22,7 +22,7 @@ services:
 
   react: #Service name used as arg by docker compose and build
     #image: ${REACT_APP}:latest
-    image: flask-app:latest
+    image: react-app:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
