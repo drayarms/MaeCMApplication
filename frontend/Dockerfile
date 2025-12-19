@@ -8,8 +8,10 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 # Copy built static files
-COPY --from=build /app/build /usr/share/nginx/html                          # build is the alias we gave to the React container using directive AS
+# build is the alias we gave to the React container using directive AS
+COPY --from=build /app/build /usr/share/nginx/html                          
 # Replace default nginx config with our app config (routes /api to backend)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80                                                                   # Nginx uses port 80 to serve files
+# Nginx uses port 80 to serve files
+EXPOSE 80                                                                   
 CMD ["nginx", "-g", "daemon off;"]
