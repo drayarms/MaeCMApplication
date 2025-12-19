@@ -115,6 +115,10 @@ jobs:
             export ECR_REGISTRY="${{ secrets.ECR_REGISTRY }}"
             export FLASK_REPO="${{ secrets.FLASK_REPO }}"
             export REACT_REPO="${{ secrets.REACT_REPO }}"
+            export AWS_REGION="${{ secrets.AWS_REGION }}"
+
+            # Log in to ECR on EC2 (requires awscli installed on EC2 and IAM role)
+            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
 
             # Pull latest images from ECR
             docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
