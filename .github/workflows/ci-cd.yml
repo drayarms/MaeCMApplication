@@ -111,7 +111,12 @@ jobs:
             set -e
             cd ~/app
 
-            # Pull latest images
+            # Export ECR variables so Docker can resolve images
+            export ECR_REGISTRY="${{ secrets.ECR_REGISTRY }}"
+            export FLASK_REPO="${{ secrets.FLASK_REPO }}"
+            export REACT_REPO="${{ secrets.REACT_REPO }}"
+
+            # Pull latest images from ECR
             docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
 
             # Deploy services (uses .env automatically)
