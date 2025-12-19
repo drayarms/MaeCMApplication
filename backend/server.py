@@ -111,7 +111,7 @@ def contact():
 	#email = data["email"]
 	#phone = data["phone"]
 
-	required = ["firsName", "lastName", "email", "phone"]
+	required = ["firstName", "lastName", "email", "phone"]
 	for field in required:
 		if field not in data or not data[field]:
 			return jsonify({"message": f"{field} is required"}), 400
