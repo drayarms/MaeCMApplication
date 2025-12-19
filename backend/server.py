@@ -89,7 +89,10 @@ if __name__ == "__main__":
 
 
 #FOR PROD. ONLY SERVES API. NGINX WILL SERVE FRONTEND
-from flask import Flask, jsonify
+from MaeCMEmail.mae_cm_email import send_contact_email 
+
+
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -99,7 +102,27 @@ CORS(app)
 def hello():
     return jsonify({"message": "Hello from Flask API!"})
 
+@app.route("/api/contact", methods=["POST"])
+def contact():
+	data = request.get_json()
+
+	#firstName = data["firstName"]
+	#lastName = data["lastName"]
+	#email = data["email"]
+	#phone = data["phone"]
+
+	required = ["firsName", "lastName", "email", "phone"]
+	for field in required:
+		if field not in data or not data[field]:
+			return jsonify({"message": f"{field} is required"}), 400
+
+	send_contact_email(data)
+
+	return jsonify({
+		"status": "success",
+		"message": "Thank you! Your message has been sent."
+	}), 200   
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-
 

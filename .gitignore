@@ -3,3 +3,6 @@ frontend/node_modules
 GitHubPAT.txt
 README
 .venv
+.env
+backend/test_smtp.py
+backend/send_test_email.py

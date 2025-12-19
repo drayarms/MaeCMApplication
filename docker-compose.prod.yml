@@ -10,6 +10,9 @@ services:
     networks:
       - app-network
 
+    env_file:  #Injects vars into the container
+      - .env
+
   react:
     image: ${ECR_REGISTRY}/${REACT_REPO}:latest #${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REACT_APP}:latest
     ports:
