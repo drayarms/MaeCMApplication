@@ -20,7 +20,7 @@ jobs:
       FLASK_REPO: ${{ secrets.FLASK_REPO }}
       AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
 
-      # SMTP (will be written to .env on EC2)
+      # SMTP
       SMTP_HOST: ${{ secrets.SMTP_HOST }}
       SMTP_PORT: ${{ secrets.SMTP_PORT }}
       SMTP_USER: ${{ secrets.SMTP_USER }}
@@ -44,7 +44,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       # ----------------------------
-      # Login to ECR
+      # Login to Amazon ECR
       # ----------------------------
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
@@ -68,10 +68,10 @@ jobs:
           docker push $ECR_REGISTRY/$FLASK_REPO:latest
 
       # ----------------------------
-      # Upload files to EC2
+      # Upload docker-compose files to EC2
       # ----------------------------
-      - name: Upload files to EC2
-        uses: appleboy/scp-action@v0.1.7
+      - name: Upload docker-compose files to EC2
+        uses: appleboy/scp-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -80,24 +80,26 @@ jobs:
           target: "/home/${{ secrets.EC2_USER }}/app"
 
       # ----------------------------
-      # Upload .env with SMTP
+      # Create .env directly on EC2
       # ----------------------------
-      - name: Create & upload .env to EC2
-        uses: appleboy/scp-action@v0.1.7
+      - name: Create .env on EC2
+        uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          content: |
+          script: |
+            mkdir -p ~/app
+            cat > ~/app/.env <<EOF
             SMTP_HOST=${{ env.SMTP_HOST }}
             SMTP_PORT=${{ env.SMTP_PORT }}
             SMTP_USER=${{ env.SMTP_USER }}
             SMTP_PASS=${{ env.SMTP_PASS }}
             TO_EMAIL=${{ env.TO_EMAIL }}
-          target: "/home/${{ secrets.EC2_USER }}/app/.env"
+            EOF
 
       # ----------------------------
-      # Deploy on EC2
+      # Deploy services on EC2
       # ----------------------------
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
