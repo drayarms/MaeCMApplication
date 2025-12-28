@@ -29,8 +29,16 @@
   text-decoration: none;
 }
 
+.nav-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  font-weight: 450;
+}
+
+
 /* services submenu panel */
-.services-panel {
+/*.services-panel {
   position: absolute;
   right: 0;
   top: 100%;
@@ -40,11 +48,32 @@
   display: none;
   z-index: 2000;
   box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}*/
+.services-panel {
+  position: absolute;
+  top: calc(100% + 0px); /* flush with header bottom */
+  right: -110%;
+
+  width: 240px;
+  background: #f2f2f2;
+  border: 1px solid #000;
+  display: none;
+
+  z-index: 2000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
 }
+
+.main-nav a,
+.custom-nav-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .services-panel.visible {
   display: block;
 }
 
+/*
 .service-link {
   color: #000;
   text-decoration: none;
@@ -54,6 +83,85 @@
 .service-link:hover {
   color: #d4af37;
 }
+*/
+
+
+
+
+
+.custom-nav-link {
+  position: relative;
+}
+
+.custom-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: #ffd11a;
+  transition: width 0.25s ease;
+}
+
+.custom-nav-link:hover::after,
+.custom-nav-link.active::after {
+  width: 100%;
+}
+
+
+
+
+/* Services list */
+.services-list {
+  padding: 0;
+}
+
+/* Link base */
+.service-link {
+  position: relative;
+  display: block;
+  padding: 8px 0;
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.25s ease;
+}
+
+/* Gold underline */
+.service-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: #ffd11a;
+  transition: width 0.25s ease;
+}
+
+/* Hover */
+/*.service-link:hover {
+  color: #ffd11a;
+}*/
+
+.service-link:hover::after {
+  width: 100%;
+}
+
+/* Active route */
+.service-link.active {
+  color: #ffd11a;
+}
+
+.service-link.active::after {
+  width: 100%;
+}
+
+
+
+
+
 
 /* mobile toggler lines */
 .navbar-toggler {
@@ -165,19 +273,24 @@
 .btn-lightblue { background: #2e9fff; color: #fff; }
 
 /* footer bottom bar */
-.bottom-bar { font-size: 12px; }
+.bottom-bar { 
+  font-size: 13px; 
+  font-weight: 200;
+}
 
 /* scroll top button */
 .scroll-top-btn {
   position: fixed;
   right: 20px;
   bottom: 30px;
-  width: 48px;
-  height: 48px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid #f2f2f2;
   background: transparent;
-  color: #fff;
+  color: #999999;
+  font-size: 30px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -225,4 +338,339 @@
 }
 
 
+.font-style{ /*General font style for every page*/
+  font-family: Gill Sans, Arial, Helvetica, sans-serif; 
+}
 
+.section-heading {
+  font-weight: bold;          /* bold */
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+
+/* Headings */
+.large_bold_white {
+  font-size: 5em;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+}
+
+.section-heading {
+  font-size: 2em;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.light-white-section-heading {
+  font-weight: 500;
+  color: #f2f2f2;
+  font-size: 1rem;
+}
+
+.white-section-heading {
+  font-weight: 600;
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.mini-white-section-heading {
+  font-weight: 350;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+/* Lines */
+.large-thin-gold-line {
+  height: 2px;
+  width: 70px;
+  background: #ffd11a;
+  /*margin: 10px auto 15px;*/
+}
+
+footer .little-thin-gold-line {
+  margin: 15px 0;   /* left aligned */
+}
+
+.little-thin-gold-line {
+  height: 1.8px;
+  width: 40px;
+  background: #ffd11a;
+  /*margin: 10px auto;*/
+  margin: 10px auto 15px;
+}
+
+/* Text */
+.literature {
+  color: #8c8c8c;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 200;
+}
+
+.literature_light {
+  color: #d9d9d9;
+  text-align: center;
+  font-size: 0.97rem;
+  font-weight: 100;
+}
+
+/* Footer-specific text alignment */
+footer .literature_light {
+  text-align: left;
+}
+
+.literature-heading {
+  color: #4d4d4d;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 200;
+}
+
+.state_license{
+  margin-top:40px;
+}
+
+.company_intro_heading{
+
+}
+
+.company_intro_literature{
+  margin-top: 50px;
+}
+
+/* Buttons */
+.gold-button {
+  background: #ffd11a;
+  color: #000;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 1px;
+  font-size: 11px;
+  font-weight: 580;
+  transition: background 0.3s;
+}
+
+.gold-button:hover {
+  background: #e6e6e6;
+}
+
+/* Footer form */
+/*.contact-form-text {
+  color: #f2f2f2;
+  font-size: 1rem;
+  background: #262626;
+  border: 1px solid #444;
+}*/
+
+
+
+
+
+.form-control.contact-form-text {
+  background-color: #404040;
+  /*color: #ff0000;*/
+  font-weight: 350;
+  font-size: 0.8rem;
+  border: 1px solid #555;
+  border-radius: 1px;
+  padding: 0.6rem 0.75rem;
+}
+
+/* Placeholder color */
+.form-control.contact-form-text::placeholder {
+  color: #e6e6e6;
+  opacity: 1;
+}
+
+/* Focus state */
+.form-control.contact-form-text:focus,
+.form-control.contact-form-text:focus-visible {
+  /*color: #ffd11a;*/
+  background-color: #404040;
+  border-color: #ffd11a;
+  outline: none;
+  box-shadow: none; /* removes Bootstrap halo */
+}
+
+
+
+
+
+.form-control.contact-form-text:focus,
+.form-control.contact-form-text:focus-visible {
+  color: #ffd11a !important;
+}
+
+
+/* FORCE text color inside inputs (Chrome / Safari fix) */
+.form-control.contact-form-text,
+.form-control.contact-form-text * {
+  color: #ffffff !important;
+}
+
+/* Autofill text color */
+.form-control.contact-form-text:-webkit-autofill {
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Autofill on focus */
+.form-control.contact-form-text:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffd11a !important;
+}
+
+
+
+
+/* Textarea resize control (optional, cleaner look) */
+.contact-form-text textarea,
+textarea.contact-form-text {
+  resize: vertical;
+}
+
+
+
+
+
+/* Selection */
+::selection {
+  background: #f2d11a;
+  color: #ffffff;
+}
+
+
+/* Footer links inherit text color */
+footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Gold hover effect for footer links */
+footer a:hover {
+  color: #ffd11a;
+}
+
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px; /* ~75% MacBook Air */
+  margin: 0 auto;
+  aspect-ratio: 7 / 8;
+  overflow: hidden;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Controls */
+/*
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 3px solid #000;
+  background: transparent;
+  color: #000;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.carousel-control.left {
+  left: 15px;
+}
+
+.carousel-control.right {
+  right: 15px;
+}*/
+
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 65px;
+  height: 65px;
+
+  font-size: 70px;
+
+  border-radius: 50%;
+  border: 2px solid #000;
+  background: transparent;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+}
+
+.carousel-control i {
+  font-size: 16px;
+  line-height: 1;
+  color: #000;
+  display: block;
+  transition: color 0.3s;
+}
+
+.carousel-control:hover {
+  background: #000;
+}
+
+.carousel-control:hover i {
+  color: #fff;
+}
+
+
+.carousel-control.left {
+  left: 15px;
+}
+
+.carousel-control.right {
+  right: 15px;
+}
+
+
+
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.6s ease-in-out;
+}
+
+.carousel-image {
+  min-width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+
+.about-the-company-leterature{
+  line-height: 1.7; /* 1.5 times the font size */
+}
+
+.footer-additional-links{
+  line-height: 1.2; /* 1.5 times the font size */
+}

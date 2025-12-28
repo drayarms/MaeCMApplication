@@ -71,6 +71,7 @@ export default function Header() {
 import React, { useState } from "react";
 import logoImg from "../assets/logo.png";
 import { usePageTransition } from "../components/PageTransitionProvider";
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -97,13 +98,22 @@ export default function Header() {
 
             {/* ABOUT US */}
             <li className="nav-item">
-              <span
-                className="nav-link custom-nav-link"
-                onClick={() => navigateWithTransition("/about-us")}
-                style={{ cursor: "pointer" }}
+              
+
+
+              <NavLink
+                to="/about-us"
+                className={({ isActive }) =>
+                  `nav-link custom-nav-link ${isActive ? "active" : ""}`
+                }
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateWithTransition("/about-us");
+                }}
               >
                 ABOUT US
-              </span>
+              </NavLink>
+
             </li>
 
             {/* SERVICES (no navigation) */}
@@ -116,30 +126,144 @@ export default function Header() {
                 SERVICES
               </span>
 
-              <div
-                className={`services-panel p-3 ${servicesOpen ? "visible" : ""}`}
-                onMouseEnter={() => setServicesOpen(true)}
-                onMouseLeave={() => setServicesOpen(false)}
-              >
-                <ul className="list-unstyled mb-0">
-                  {Array.from({ length: 7 }).map((_, i) => (
-                    <li key={i} className="service-item py-2">
-                      <a className="service-link" href="#!">Service {i + 1}</a>
+
+
+                <div
+                  className={`services-panel p-3 ${servicesOpen ? "visible" : ""}`}
+                  onMouseEnter={() => setServicesOpen(true)}
+                  onMouseLeave={() => setServicesOpen(false)}
+                >
+                  <ul className="list-unstyled mb-0 services-list">
+                    <li className="service-item">
+                      <NavLink
+                        to="/services/soft-story-retrofit"
+                        className={({ isActive }) =>
+                          `service-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateWithTransition("/services/soft-story-retrofit");
+                        }}
+                      >
+                        SOFT STORY RETROFIT
+                      </NavLink>
                     </li>
-                  ))}
-                </ul>
-              </div>
+
+                    <li className="service-item">
+                      <NavLink
+                        to="/services/residential-remodels-renovations"
+                        className={({ isActive }) =>
+                          `service-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateWithTransition("/services/residential-remodels-renovations");
+                        }}
+                      >
+                        RESIDENTIAL REMODELS / RENOVATIONS
+                      </NavLink>
+                    </li>
+
+                    <li className="service-item">
+                      <NavLink
+                        to="/services/accessory-dwelling-unit"
+                        className={({ isActive }) =>
+                          `service-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateWithTransition("/services/accessory-dwelling-unit");
+                        }}
+                      >
+                        ADU (ACCESSORY DWELLING UNIT)
+                      </NavLink>
+                    </li>
+
+                    <li className="service-item">
+                      <NavLink
+                        to="/services/sb721-deck-balcony-inspections"
+                        className={({ isActive }) =>
+                          `service-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateWithTransition("/services/sb721-deck-balcony-inspections");
+                        }}
+                      >
+                        SB721 DECK & BALCONY INSPECTIONS
+                      </NavLink>
+                    </li>
+
+                    <li className="service-item">
+                      <NavLink
+                        to="/services/commercial-construction"
+                        className={({ isActive }) =>
+                          `service-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateWithTransition("/services/commercial-construction");
+                        }}
+                      >
+                        COMMERCIAL CONSTRUCTION
+                      </NavLink>
+                    </li>
+
+                    <li className="service-item">
+                      <NavLink
+                        to="/services/structural-concrete"
+                        className={({ isActive }) =>
+                          `service-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateWithTransition("/services/structural-concrete");
+                        }}
+                      >
+                        STRUCTURAL CONCRETE
+                      </NavLink>
+                    </li>
+
+                    <li className="service-item">
+                      <NavLink
+                        to="/services/engineering-associated-services"
+                        className={({ isActive }) =>
+                          `service-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateWithTransition("/services/engineering-associated-services");
+                        }}
+                      >
+                        ENGINEERING & ASSOCIATED SERVICES
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+
+
+
+
+
             </li>
 
             {/* CONTACT US */}
             <li className="nav-item">
-              <span
-                className="nav-link custom-nav-link"
-                onClick={() => navigateWithTransition("/contact-us")}
-                style={{ cursor: "pointer" }}
+              
+
+              <NavLink
+                to="/contact-us"
+                className={({ isActive }) =>
+                  `nav-link custom-nav-link ${isActive ? "active" : ""}`
+                }
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateWithTransition("/contact-us");
+                }}
               >
                 CONTACT US
-              </span>
+              </NavLink>
+
             </li>
           </ul>
         </nav>

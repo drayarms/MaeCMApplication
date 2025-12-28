@@ -38,8 +38,9 @@ export default function AboutUs() {
 }*/
 
 
-
+/*
 import React from "react";
+import Footer from "../sections/Footer";
 
 export default function AboutUs() {
   return (
@@ -48,4 +49,27 @@ export default function AboutUs() {
       <p>Placeholder about-us content. This page uses the same header and footer components.</p>
     </div>
   );
+}*/
+
+
+
+import AboutHero from "../sections/AboutHero";
+import CompanyIntro from "../sections/CompanyIntro";
+import StaffSection from "../sections/StaffSection";
+import GeneralConstruction from "../sections/GeneralConstruction";
+import CTAWide from "../sections/CTAWide";
+import AboutFooter from "../sections/Footer";
+
+export default function AboutUs() {
+  return (
+    <>
+      <AboutHero />
+      <CompanyIntro />
+      <StaffSection />
+      <GeneralConstruction />
+      <CTAWide />
+      <AboutFooter />
+    </>
+  );
 }
+

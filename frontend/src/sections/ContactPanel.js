@@ -86,7 +86,7 @@ export default function ContactPanel() {
     }
   };
 
-  return (
+  /*return (
     <section
       className="contact-panel container py-5"
       style={{ background: "#fff", minHeight: "400px" }}
@@ -156,7 +156,100 @@ export default function ContactPanel() {
         </div>
       </form>
 
-      {/* Flask response */}
+      { //Flask response }
+      {responseMessage && (
+        <div className="alert alert-success mt-4 text-center">
+          {responseMessage}
+        </div>
+      )}
+
+      {error && (
+        <div className="alert alert-danger mt-4 text-center">
+          {error}
+        </div>
+      )}
+    </section>
+  );
+}*/
+
+
+
+  return (
+    <section className="contact-panel container py-5 font-style" style={{ background: "#fff" }}>
+      {/* Reusable heading */}
+      <p> <h2 className="section-heading">Contact Us</h2> </p>
+
+      {/* Center form */}
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+          <form noValidate onSubmit={handleSubmit}>
+            {/* Name */}
+            <label className="form-label fw-bold">
+              Name <span className="required">*</span>
+            </label>
+            <div className="d-flex gap-2 mb-3">
+              <input
+                className="form-control"
+                placeholder="First"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="form-control"
+                placeholder="Last"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* Email */}
+            <label className="form-label fw-bold">
+              Email <span className="required">*</span>
+            </label>
+            <input
+              className="form-control mb-3"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+
+            {/* Phone */}
+            <label className="form-label fw-bold">
+              Phone <span className="required">*</span>
+            </label>
+            <input
+              className="form-control mb-4"
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+
+            {/* Button */}
+            <div className="text-center">
+              <button
+                type="submit"
+                className="btn px-5"
+                disabled={loading}
+                style={{
+                  backgroundColor: "#00ace6",
+                  color: "#fff"
+                }}
+              >
+                {loading ? "Submitting..." : "Next"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* Responses */}
       {responseMessage && (
         <div className="alert alert-success mt-4 text-center">
           {responseMessage}
@@ -171,7 +264,6 @@ export default function ContactPanel() {
     </section>
   );
 }
-
 
 
 

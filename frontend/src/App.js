@@ -37,6 +37,9 @@ import ScrollTopButton from "./components/ScrollTopButton";
 import PageTransitionProvider from "./components/PageTransitionProvider";
 import PageWrapper from "./components/PageWrapper"; // <- import the wrapper
 
+
+import "./App.css";
+
 function App() {
   return (
     <PageTransitionProvider>
