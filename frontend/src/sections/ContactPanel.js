@@ -35,7 +35,7 @@ export default function ContactPanel() {
 
 
 
-import React, { useState } from "react";
+/*import React, { useState } from "react";
 
 export default function ContactPanel() {
   const [formData, setFormData] = useState({
@@ -86,22 +86,23 @@ export default function ContactPanel() {
     }
   };
 
-  /*return (
-    <section
-      className="contact-panel container py-5"
-      style={{ background: "#fff", minHeight: "400px" }}
-    >
-      <h3>Contact Us</h3>
 
-      <form className="needs-validation" noValidate onSubmit={handleSubmit}>
-        <div className="row">
-          <div className="col-md-6">
-            <label className="form-label">
+  return (
+    <section className="contact-panel container py-5 font-style" style={{ background: "#fff" }}>
+      {}//Reusable heading 
+      <p> <h2 className="section-heading">Contact Us</h2> </p>
+
+      {}//Center form 
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+          <form noValidate onSubmit={handleSubmit}>
+            {}//Name 
+            <label className="form-label fw-bold">
               Name <span className="required">*</span>
             </label>
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 mb-3">
               <input
-                className="form-control"
+                className="form-control home-contact-form"
                 placeholder="First"
                 name="firstName"
                 value={formData.firstName}
@@ -109,21 +110,20 @@ export default function ContactPanel() {
                 required
               />
               <input
-                className="form-control"
+                className="form-control home-contact-form"
                 placeholder="Last"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
               />
             </div>
-          </div>
 
-          <div className="col-md-6">
-            <label className="form-label">
+            {}//Email 
+            <label className="form-label fw-bold">
               Email <span className="required">*</span>
             </label>
             <input
-              className="form-control"
+              className="form-control mb-3 home-contact-form"
               type="email"
               name="email"
               value={formData.email}
@@ -131,32 +131,38 @@ export default function ContactPanel() {
               required
             />
 
-            <label className="form-label mt-3">
+            {}//Phone 
+            <label className="form-label fw-bold">
               Phone <span className="required">*</span>
             </label>
             <input
-              className="form-control"
+              className="form-control mb-4 home-contact-form"
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
               required
             />
-          </div>
-        </div>
 
-        <div className="mt-4 text-center">
-          <button
-            type="submit"
-            className="btn btn-lightblue px-5"
-            disabled={loading}
-          >
-            {loading ? "Submitting..." : "Next"}
-          </button>
+            {}//Button 
+            <div className="text-center">
+              <button
+                type="submit"
+                className="btn px-5 home-contact-form-btn"
+                disabled={loading}
+                style={{
+                  backgroundColor: "#80bfff",
+                  color: "#fff"
+                }}
+              >
+                {loading ? "Submitting..." : "Next"}
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
 
-      { //Flask response }
+      {}//Responses 
       {responseMessage && (
         <div className="alert alert-success mt-4 text-center">
           {responseMessage}
@@ -174,12 +180,68 @@ export default function ContactPanel() {
 
 
 
+import React, { useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
+export default function ContactPanel() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: ""
+  });
+
+  const [responseMessage, setResponseMessage] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      phone: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setResponseMessage(null);
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Submission failed");
+      }
+
+      setResponseMessage(data.message);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="contact-panel container py-5 font-style" style={{ background: "#fff" }}>
-      {/* Reusable heading */}
-      <p> <h2 className="section-heading">Contact Us</h2> </p>
+      <h2 className="section-heading text-center mb-4">Contact Us</h2>
 
-      {/* Center form */}
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
           <form noValidate onSubmit={handleSubmit}>
@@ -189,7 +251,7 @@ export default function ContactPanel() {
             </label>
             <div className="d-flex gap-2 mb-3">
               <input
-                className="form-control"
+                className="form-control home-contact-form"
                 placeholder="First"
                 name="firstName"
                 value={formData.firstName}
@@ -197,7 +259,7 @@ export default function ContactPanel() {
                 required
               />
               <input
-                className="form-control"
+                className="form-control home-contact-form"
                 placeholder="Last"
                 name="lastName"
                 value={formData.lastName}
@@ -210,7 +272,7 @@ export default function ContactPanel() {
               Email <span className="required">*</span>
             </label>
             <input
-              className="form-control mb-3"
+              className="form-control mb-3 home-contact-form"
               type="email"
               name="email"
               value={formData.email}
@@ -222,25 +284,25 @@ export default function ContactPanel() {
             <label className="form-label fw-bold">
               Phone <span className="required">*</span>
             </label>
-            <input
-              className="form-control mb-4"
-              type="tel"
-              name="phone"
+            <PhoneInput
+              country={"us"}
               value={formData.phone}
-              onChange={handleChange}
-              required
+              onChange={handlePhoneChange}
+              inputClass="form-control home-contact-form"
+              containerClass="mb-4"
+              enableSearch
+              inputStyle={{
+                width: "100%",
+                height: "38px"
+              }}
             />
 
             {/* Button */}
-            <div className="text-center">
+            <div>
               <button
                 type="submit"
-                className="btn px-5"
+                className="home-contact-form-btn"
                 disabled={loading}
-                style={{
-                  backgroundColor: "#00ace6",
-                  color: "#fff"
-                }}
               >
                 {loading ? "Submitting..." : "Next"}
               </button>
@@ -249,7 +311,6 @@ export default function ContactPanel() {
         </div>
       </div>
 
-      {/* Responses */}
       {responseMessage && (
         <div className="alert alert-success mt-4 text-center">
           {responseMessage}
@@ -264,7 +325,6 @@ export default function ContactPanel() {
     </section>
   );
 }
-
 
 
 

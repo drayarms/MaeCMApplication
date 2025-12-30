@@ -196,10 +196,60 @@
   overflow: hidden;
 }
 
-.hero-overlay {
+/*.hero-overlay {
   color: white;
   text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}*/
+
+
+/* Hero content layout */
+.hero-content {
+  position: absolute;
+  left: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
 }
+
+/* Base state (before load) */
+.hero-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+/* After load */
+.hero-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Typography */
+.gold-caption {
+  color: #ffd11a;
+  font-size: 1.45rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.big-bold-white-caption {
+  color: #fff;
+  font-size: 3.7rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.gracefull-white-caption {
+  color: #f2f2f2;
+  font-size: 1.3rem;
+  max-width: 520px;
+  font-weight: 300;
+}
+
+
 
 /* white panel & projects */
 .white-panel {
@@ -207,6 +257,7 @@
   text-align: center;
 }
 
+/*
 .image-grid-row {
   display: flex;
   width: 100%;
@@ -247,17 +298,196 @@
 }
 .overlay-sub {
   font-size: 0.8rem;
+}*/
+
+
+/* FILTER BAR */
+/*.projects-filter-bar {
+  background: #333333;
+  padding: 15px 25px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}*/
+
+/*.filter-item {
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
+.filter-item.active,
+.filter-item:hover {
+  color: #ffd11a;
+}*/
+
+/* GRID */
+/*.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}*/
+
+/*@media (max-width: 992px) {
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 576px) {
+  .projects-grid { grid-template-columns: 1fr; }
+}*/
+
+/*.project-tile {
+  position: relative;
+  overflow: hidden;
+}*/
+
+/*.project-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.6s ease, transform 0.6s ease;
+}*/
+
+/* Hover effect */
+/*.project-tile:hover img {
+  filter: grayscale(0%) saturate(85%);
+  transform: scale(1.02);
+}*/
+
+
+
+
+
+.overlay-title {
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.overlay-sub {
+  color: #f2f2f2;
+  font-size: 0.8rem;
+  max-width: 80%;
+}
+
+
+/* ===============================
+   FILTER BAR
+================================ */
+.projects-filter-bar {
+  background: #333333;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 25px 40px;
+}
+
+.filter-item {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.filter-item.active {
+  color: #ffd11a;
+}
+
+/* ===============================
+   GRID — HARD 4 MAX
+================================ */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding-bottom: 0px; /* padding from base of parent */
+}
+
+/* Breakpoints */
+@media (max-width: 1199px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===============================
+   IMAGE TILE
+================================ */
+.project-tile {
+  text-decoration: none;
+}
+
+.project-image {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+  transition: filter 0.4s ease;
+}
+
+.project-tile:hover .project-image {
+  filter: grayscale(0%) contrast(0.9);
+}
+
+/* ===============================
+   OVERLAY
+================================ */
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+}
+
+.project-tile:hover .project-overlay {
+  opacity: 1;
+}
+
+/* ===============================
+   LOAD MORE
+================================ */
+.projects-load-more {
+  margin-top: 50px;
+  padding-bottom: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
+/*.consult-panel {
+  padding-top: 50px;
+  min-height: 150px;
+}*/
+
+
+
 /* CTA button */
-.btn-gold {
+/*.btn-gold {
   background: #ffd11a;
   color: #000;
   padding: 12px 24px;
   text-decoration: none;
   font-weight: 700;
   border-radius: 6px;
-}
+}*/
 
 /* consultation panel overlay */
 .consult-panel .consult-overlay {
@@ -338,15 +568,20 @@
 }
 
 
-.font-style{ /*General font style for every page*/
-  font-family: Gill Sans, Arial, Helvetica, sans-serif; 
+.react-tel-input .form-control {
+  width: 100%;
 }
 
-.section-heading {
-  font-weight: bold;          /* bold */
+
+.font-style{ /*General font style for every page*/
+  font-family: Helvetica, Gill Sans, Arial,  sans-serif; 
+}
+
+/*.section-heading {
+  font-weight: bold;          
   text-align: center;
   margin-bottom: 2rem;
-}
+}*/
 
 
 /* Headings */
@@ -446,7 +681,7 @@ footer .literature_light {
   background: #ffd11a;
   color: #000;
   border: none;
-  padding: 10px 24px;
+  padding: 12px 24px;
   border-radius: 1px;
   font-size: 11px;
   font-weight: 580;
@@ -455,6 +690,21 @@ footer .literature_light {
 
 .gold-button:hover {
   background: #e6e6e6;
+}
+
+
+/* Gold button links should look like buttons */
+a.gold-button {
+  text-decoration: none;
+  color: #000; /* ensure text color stays correct */
+}
+
+/* Also prevent underline on hover/focus */
+a.gold-button:hover,
+a.gold-button:focus,
+a.gold-button:focus-visible {
+  text-decoration: none;
+  color: #000;
 }
 
 /* Footer form */
@@ -466,7 +716,36 @@ footer .literature_light {
 }*/
 
 
+.form-control.home-contact-form {
+  border-radius: 1px;
+}
 
+/*.btn.home-contact-form-btn {
+  border-radius: 1px;
+}*/
+
+.home-contact-form-btn {
+  display: inline-block;          /* ensures left alignment */
+  padding: 10px 48px;
+  background-color: #80bfff;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+}
+
+/* Hover + focus */
+.home-contact-form-btn:hover:not(:disabled),
+.home-contact-form-btn:focus-visible:not(:disabled) {
+  background-color: #5fa8e6;      /* slightly darker */
+  transform: translateY(-1px);    /* subtle lift (optional but nice) */
+}
+
+/* Disabled state */
+.home-contact-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 
 .form-control.contact-form-text {
@@ -666,7 +945,6 @@ footer a:hover {
 
 
 
-
 .about-the-company-leterature{
   line-height: 1.7; /* 1.5 times the font size */
 }
@@ -674,3 +952,156 @@ footer a:hover {
 .footer-additional-links{
   line-height: 1.2; /* 1.5 times the font size */
 }
+
+
+
+/*SERVICES PAGES*/
+
+/* Banner */
+/*.page-banner-image {
+  width: 100%;
+  height: 40vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}*/
+
+/*.page-banner-content {
+  will-change: transform, opacity;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}*/
+
+/*.page-banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}*/
+
+/* Two column layout */
+/*.service-columns {
+  display: flex;
+  gap: 3rem;
+  padding: 4rem 6vw;
+}
+
+.service-left { flex: 0 0 60%; }
+.service-right { flex: 0 0 40%; }*/
+
+/* Left-alignment overrides */
+/*.left-align {
+  text-align: left !important;
+}*/
+
+/* Literature list */
+/*.literature-list {
+  color: #7a7a7a;
+  font-size: 0.95rem;
+  font-weight: 200;
+}*/
+
+/* Gallery spacing */
+/*.gallery-caption-block {
+  margin-top: 5rem;
+  text-align: center;
+}*/
+
+/* Responsive */
+/*@media (max-width: 900px) {
+  .service-columns {
+    flex-direction: column;
+  }
+}*/
+
+
+/* ===============================
+   SERVICES PAGES
+=============================== */
+
+/* Banner */
+.page-banner-image {
+  width: 100%;
+  height: 64vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.page-banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Two column layout */
+.service-columns {
+  display: flex;
+  gap: 3rem;
+  padding: 4rem 6vw;
+}
+
+.service-left { flex: 0 0 60%; }
+.service-right { flex: 0 0 40%; }
+
+/* Form fields spacing */
+.service-right form .form-control.contact-form-text {
+  font-size: 16px;
+  margin-bottom: 1rem; /* adds gap between fields */
+}
+
+/* Submit button spacing from message */
+.service-right form button.gold-button {
+  margin-top: 1rem;
+  cursor: pointer; /* makes button cursor a pointer */
+}
+
+
+/* Left-alignment overrides */
+.left-align {
+  text-align: left !important;
+}
+
+/* Literature list */
+.literature-list {
+  color: #666666;
+  line-height: 1.7;
+  font-size: 0.95rem;
+  font-weight: 200;
+}
+
+.small-section-heading {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.tiny-section-heading {
+  font-size: 0.97em;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Gallery spacing */
+.gallery-caption-block {
+  margin-top: -20px;
+  margin-bottom:40px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .service-columns {
+    flex-direction: column;
+  }
+}
+
+
+
+
+
+

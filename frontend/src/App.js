@@ -26,12 +26,14 @@ function App() {
 export default App;*/
 
 
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
+import SoftStoryRetrofit from "./pages/services/SoftStoryRetrofit"; 
+
 import Header from "./components/Header";
 import ScrollTopButton from "./components/ScrollTopButton";
 import PageTransitionProvider from "./components/PageTransitionProvider";
@@ -50,6 +52,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/services/soft-story-retrofit" element={<SoftStoryRetrofit />} />
           </Routes>
         </PageWrapper>
       </main>

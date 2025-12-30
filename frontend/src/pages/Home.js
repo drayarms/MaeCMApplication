@@ -141,7 +141,7 @@ export default function Dashboard() {
 
 */
 
-import React from "react";
+/*import React from "react";
 import Hero from "../sections/Hero";
 import WhitePanel from "../sections/WhitePanel";
 import Projects from "../sections/Projects";
@@ -166,6 +166,28 @@ export default function Home() {
       <Footer />
     </>
   );
-}
+}*/
 
+
+
+import React from "react";
+import Hero from "../sections/Hero";
+import WhitePanel from "../sections/WhitePanel";
+import Projects from "../sections/Projects";
+import Consultation from "../sections/Consultation";
+import ContactPanel from "../sections/ContactPanel";
+import Footer from "../sections/Footer";
+
+export default function Home() {
+  return (
+    <>
+      <Hero />
+      <WhitePanel />
+      <Projects />
+      <Consultation />
+      <ContactPanel />
+      <Footer />
+    </>
+  );
+}
 

@@ -58,9 +58,9 @@ import CompanyIntro from "../sections/CompanyIntro";
 import StaffSection from "../sections/StaffSection";
 import GeneralConstruction from "../sections/GeneralConstruction";
 import CTAWide from "../sections/CTAWide";
-import AboutFooter from "../sections/Footer";
+import Footer from "../sections/Footer";
 
-export default function AboutUs() {
+export default function SoftStoryRetrofit() {
   return (
     <>
       <AboutHero />
@@ -68,7 +68,7 @@ export default function AboutUs() {
       <StaffSection />
       <GeneralConstruction />
       <CTAWide />
-      <AboutFooter />
+      <Footer />
     </>
   );
 }

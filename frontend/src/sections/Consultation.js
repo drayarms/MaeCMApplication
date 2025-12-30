@@ -4,7 +4,7 @@ import bg from "../assets/background.jpg"; // reuse or another image
 export default function Consultation() {
   return (
     <section className="consult-panel d-flex align-items-center justify-content-center" style={{
-      height: "100px",
+      height: "150px",
       backgroundImage: `url(${bg})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
@@ -15,3 +15,9 @@ export default function Consultation() {
     </section>
   );
 }
+
+
+
+
+
+
