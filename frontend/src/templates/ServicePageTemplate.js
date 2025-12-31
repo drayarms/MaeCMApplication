@@ -15,7 +15,7 @@ export default function ServicePageTemplate({
   /* ===============================
      FORM STATE
   ================================ */
-  /*const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
@@ -23,85 +23,98 @@ export default function ServicePageTemplate({
     message: ""
   });
 
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState(null);
+  const [error, setError] = useState(null);
+
   const isValid =
-    form.name &&
-    form.email &&
-    form.subject &&
-    form.message;
+    formData.name &&
+    formData.email &&
+    formData.subject &&
+    formData.message;
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = async (e) => {
+  /*const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isValid) return;
 
-    await fetch("/api/contact-us", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form)
-    });
-
-    setForm({
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: ""
-    });
-  };*/
-
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: ""
-  });
-
-  const isValid =
-    form.name &&
-    form.email &&
-    form.subject &&
-    form.message;  
-
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });    
-
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!form.name || !form.email || !form.subject || !form.message) {
-      setErrorMessage("Please fill out all required fields (*)");
-      return;
-    }
-
-    setErrorMessage(""); // clear previous errors
+    setLoading(true);
+    setError(null);
+    setResponseMessage(null);
 
     try {
       const response = await fetch("/api/contact-us", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify(formData)
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Form submission failed");
+        throw new Error(data.message || "Submission failed");
       }
 
-      // Clear form on success
-      setForm({
+      setResponseMessage(data.message || "Message sent successfully!");
+      setFormData({
         name: "",
         email: "",
         phone: "",
         subject: "",
         message: ""
       });
-      alert("Message sent successfully!");
     } catch (err) {
-      setErrorMessage(err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };*/
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isValid) return;
+
+    setLoading(true);
+    setError(null);
+    setResponseMessage(null);
+
+    try {
+      const response = await fetch("/api/contact-us", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      let data = {};
+      try {
+        data = await response.json(); // may fail if no JSON
+      } catch {
+        data = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || "Submission failed");
+      }
+
+      setResponseMessage(
+        data.message || "Message sent successfully!"
+      );
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: ""
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,9 +137,7 @@ export default function ServicePageTemplate({
         style={{ backgroundImage: `url(${bannerImage})` }}
       >
         <div className="page-banner-overlay">
-          <div className="big-bold-white-caption">
-            {bannerText}
-          </div>
+          <div className="big-bold-white-caption">{bannerText}</div>
           <div className="large-thin-gold-line" />
         </div>
       </div>
@@ -136,6 +147,7 @@ export default function ServicePageTemplate({
       ================================ */}
       <section className="service-content">
         <div className="service-columns">
+
           {/* LEFT COLUMN */}
           <div className="service-left">
             <div className="section-heading">{heading}</div>
@@ -163,7 +175,7 @@ export default function ServicePageTemplate({
               Complete the form below to get in touch with our professional team.
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
               {[
                 ["name", "Your Name*"],
                 ["email", "Your Email*"],
@@ -174,9 +186,10 @@ export default function ServicePageTemplate({
                   key={name}
                   name={name}
                   placeholder={placeholder}
-                  value={form[name]}
+                  value={formData[name]}
                   onChange={handleChange}
-                  className="form-control contact-form-text"
+                  className="form-control footerless-form contact-form-text"
+                  required={name !== "phone"}
                 />
               ))}
 
@@ -184,24 +197,26 @@ export default function ServicePageTemplate({
                 name="message"
                 placeholder="Your Message*"
                 rows="4"
-                value={form.message}
+                value={formData.message}
                 onChange={handleChange}
-                className="form-control contact-form-text"
+                className="form-control footerless-form contact-form-text"
+                required
               />
 
+              <button
+                className="footerless-form gold-button"
+                disabled={loading || !isValid}
+              >
+                {loading ? "SENDING..." : "SUBMIT"}
+              </button>
 
-              {errorMessage && (
-                <p className="text-danger" style={{ marginTop: "0.5rem" }}>
-                  {errorMessage}
-                </p>
+              {responseMessage && (
+                <p className="text-success mt-2">{responseMessage}</p>
               )}
 
-              <button
-                className="gold-button"
-                disabled={!isValid}
-              >
-                SUBMIT
-              </button>
+              {error && (
+                <p className="text-danger mt-2">{error}</p>
+              )}
             </form>
           </div>
         </div>
@@ -210,38 +225,40 @@ export default function ServicePageTemplate({
       {/* ===============================
          GALLERY
       ================================ */}
-      <div className="gallery-caption-block">
-        <div className="section-heading">{galleryCaption}</div>
-        <div className="little-thin-gold-line" />
-      </div>
+      <div className="service-gallery">
+        <div className="gallery-caption-block">
+          <div className="section-heading">{galleryCaption}</div>
+          <div className="little-thin-gold-line" />
+        </div>
 
-      <section className="projects-grid">
-        {projects.map(project => (
-          <Link
-            key={project.link}
-            to={`/portfolio_page/${project.link}`}
-            className="project-tile"
-          >
-            <div
-              className="project-image"
-              style={{ backgroundImage: `url(${project.image})` }}
+        <section className="projects-grid">
+          {projects.map(project => (
+            <Link
+              key={project.link}
+              to={`/portfolio_page/${project.link}`}
+              className="project-tile"
             >
-              <div className="project-overlay">
-                <div className="overlay-title">{project.location}</div>
-                <div className="overlay-sub">
-                  {project.types.join(" / ")}
+              <div
+                className="project-image"
+                style={{ backgroundImage: `url(${project.image})` }}
+              >
+                <div className="project-overlay">
+                  <div className="overlay-title">{project.location}</div>
+                  <div className="overlay-sub">
+                    {project.types.join(" / ")}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </section>
+            </Link>
+          ))}
+        </section>
+      </div>
 
       {/* ===============================
          FOOTER
-      ================================ */}  
+      ================================ */}
       <Footer />
-
     </>
   );
 }
+

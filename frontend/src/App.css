@@ -389,6 +389,10 @@
   color: #ffd11a;
 }
 
+.filter-item:hover {
+  color: #ffd11a;
+}
+
 /* ===============================
    GRID — HARD 4 MAX
 ================================ */
@@ -752,7 +756,7 @@ a.gold-button:focus-visible {
   background-color: #404040;
   /*color: #ff0000;*/
   font-weight: 350;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   border: 1px solid #555;
   border-radius: 1px;
   padding: 0.6rem 0.75rem;
@@ -1038,6 +1042,10 @@ footer a:hover {
   align-items: center;
 }
 
+.page-banner-image .large-thin-gold-line{
+  margin-top: 13px;
+}
+
 /* Two column layout */
 .service-columns {
   display: flex;
@@ -1049,17 +1057,24 @@ footer a:hover {
 .service-right { flex: 0 0 40%; }
 
 /* Form fields spacing */
-.service-right form .form-control.contact-form-text {
-  font-size: 16px;
+/*.service-right form .form-control.contact-form-text {*/
+.footerless-form {  
   margin-bottom: 1rem; /* adds gap between fields */
 }
 
 /* Submit button spacing from message */
-.service-right form button.gold-button {
+/*.service-right form button.gold-button {*/
+.footerless-form.gold-button{
   margin-top: 1rem;
+  font-size: 12px;
+  border-radius: 1px;
   cursor: pointer; /* makes button cursor a pointer */
 }
 
+.footerless-form.gold-button:hover {
+  background: #404040;
+  color: #f2f2f2;
+}
 
 /* Left-alignment overrides */
 .left-align {
@@ -1100,8 +1115,67 @@ footer a:hover {
   }
 }
 
+/* Service page gallery spacing before footer */
+.service-gallery {
+  margin-bottom: 55px;
+}
 
 
 
+/* ===============================
+   CONTACT PANEL 2
+================================ */
 
+.contact-panel-2 {
+  margin: 55px 0;
+}
+
+.contact-panel-2-columns {
+  display: flex;
+  gap: 3rem;
+  padding: 0 6vw;
+}
+
+.contact-panel-2-left,
+.contact-panel-2-right {
+  flex: 0 0 50%;
+}
+
+/* Form spacing */
+.contact-panel-2-form {
+  margin-top: 30px;
+}
+
+.contact-panel-2-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.contact-panel-2-form input,
+.contact-panel-2-form textarea {
+  margin-bottom: 1rem;
+}
+
+/* Map */
+.contact-panel-2-map {
+  margin-top: 30px;
+  width: 100%;
+  height: 350px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .contact-panel-2-columns {
+    flex-direction: column;
+  }
+
+  .contact-panel-2-row {
+    flex-direction: column;
+  }
+
+  .contact-panel-2-map {
+    height: 300px;
+  }
+}
 

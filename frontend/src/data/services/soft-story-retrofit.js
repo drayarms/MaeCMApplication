@@ -18,7 +18,7 @@ export const SOFT_STORY_RETROFIT = {
       of the project eases the workload of property managers.
     </p>
 
-    <p>Our Soft Story Retrofit Service includes:</p>
+    <p>Our Soft Story Retrofit Service Includes:</p>
   `,
 
   bullets: [

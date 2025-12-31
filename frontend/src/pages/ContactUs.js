@@ -40,12 +40,16 @@ export default function AboutUs() {
 */
 
 import React from "react";
-import ContactPanel from "../sections/ContactPanel";
+import ContactHero from "../sections/ContactHero";
+import ContactPanel2 from "../sections/ContactPanel2";
+import Footer from "../sections/Footer";
 
 export default function ContactUs() {
   return (
     <div>
-      <ContactPanel />
+      <ContactHero />
+      <ContactPanel2 />
+      <Footer />
     </div>
   );
 }

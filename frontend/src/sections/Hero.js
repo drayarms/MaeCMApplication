@@ -126,7 +126,7 @@ export default function Hero() {
       style={{
         backgroundImage: `url(${bg})`,
         height: "600px",
-        backgroundSize: "125%",          // 🔥 zoom in
+        backgroundSize: "125%",          // zoom in
         backgroundPosition: "center top",
         backgroundRepeat: "no-repeat",
       }}

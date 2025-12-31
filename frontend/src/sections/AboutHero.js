@@ -21,7 +21,7 @@ export default function AboutHero() {
 
 
 
-import React from "react";
+/*import React from "react";
 import heroImg from "../assets/about_us_backdrop.jpg";
 
 export default function AboutHero() {
@@ -39,5 +39,30 @@ export default function AboutHero() {
       <div className="large-thin-gold-line" />
     </div>
   );
+}*/
+
+/*
+import React from "react";
+import PageHeroTemplate from "../templates/PageHeroTemplate";
+import heroImg from "../assets/about_us_backdrop.jpg";
+
+export default function AboutHero() {
+  return (
+    <PageHeroTemplate
+      backgroundImage={heroImg}
+      caption="About Us"
+    />
+  );
+}*/
+
+
+import React from "react";
+import PageHeroTemplate from "../templates/PageHeroTemplate";
+
+export default function AboutHero() {
+  return <PageHeroTemplate caption="About Us" />;
 }
+
+
+
 
