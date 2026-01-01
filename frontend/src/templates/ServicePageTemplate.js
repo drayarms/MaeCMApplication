@@ -1,9 +1,20 @@
 import React, { useState, useMemo } from "react";
+import SEO from "../components/SEO";
 import { Link } from "react-router-dom";
 import { PROJECTS } from "../data/projects-data";
 import Footer from "../sections/Footer";
 
+//export default function ServicePageTemplate({
+  //bannerImage,
+  //bannerText,
+  //heading,
+  //content,
+  //bullets,
+  //projectType,
+  //galleryCaption
+//}) {
 export default function ServicePageTemplate({
+  seo,
   bannerImage,
   bannerText,
   heading,
@@ -12,6 +23,7 @@ export default function ServicePageTemplate({
   projectType,
   galleryCaption
 }) {
+
   /* ===============================
      FORM STATE
   ================================ */
@@ -129,6 +141,10 @@ export default function ServicePageTemplate({
 
   return (
     <>
+      {/* ===============================
+         SEO
+      ================================ */}
+      {seo && <SEO {...seo} />}    
       {/* ===============================
          PAGE BANNER
       ================================ */}

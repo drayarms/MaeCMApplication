@@ -89,6 +89,8 @@ if __name__ == "__main__":
 
 
 #FOR PROD. ONLY SERVES API. NGINX WILL SERVE FRONTEND
+from MaeCMEmail.mae_cm_email import send_home_contact_email 
+from MaeCMEmail.mae_cm_email import send_footer_contact_email 
 from MaeCMEmail.mae_cm_email import send_contact_email 
 
 from flask import Flask, request, jsonify
@@ -101,8 +103,8 @@ CORS(app)
 def hello():
     return jsonify({"message": "Hello from Flask API!"})
 
-@app.route("/api/contact", methods=["POST"])
-def contact():
+@app.route("/api/home-contact-form", methods=["POST"])
+def handle_home_contact_form():
 	data = request.get_json()
 
 	#firstName = data["firstName"]
@@ -115,12 +117,47 @@ def contact():
 		if field not in data or not data[field]:
 			return jsonify({"message": f"{field} is required"}), 400
 
-	send_contact_email(data)
+	send_home_contact_email(data)
 
 	return jsonify({
 		"status": "success",
 		"message": "Thank you! Your message has been sent."
 	}), 200   
+
+
+@app.route("/api/footer-contact-form", methods=["POST"])
+def handle_footer_contact_form():
+	data = request.get_json()
+
+	required = ["name", "email", "message"]
+	for field in required:
+		if field not in data or not data[field]:
+			return jsonify({"message": f"{field} is required"}), 400
+
+	send_footer_contact_email(data)
+
+	return jsonify({
+		"status": "success",
+		"message": "Thank you! Your message has been sent."
+	}), 200  
+
+
+@app.route("/api/contact-form", methods=["POST"])
+def handle_contact_form():
+	data = request.get_json()
+
+	required = ["name", "email", "subject", "message"]
+	for field in required:
+		if field not in data or not data[field]:
+			return jsonify({"message": f"{field} is required"}), 400
+
+	send_contact_email(data)
+
+	return jsonify({
+		"status": "success",
+		"message": "Thank you! Your message has been sent."
+	}), 200 
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

@@ -8,7 +8,7 @@ SMTP_USER = os.getenv("SMTP_USER")      # your email
 SMTP_PASS = os.getenv("SMTP_PASS")      # app password
 TO_EMAIL  = os.getenv("TO_EMAIL")       # where contact emails go
 
-def send_contact_email(data):
+def send_home_contact_email(data):
     msg = EmailMessage()
     msg["Subject"] = "New Contact Form Submission"
     msg["From"] = SMTP_USER
@@ -27,3 +27,45 @@ def send_contact_email(data):
         server.starttls()
         server.login(SMTP_USER, SMTP_PASS)
         server.send_message(msg)
+
+
+
+def send_footer_contact_email(data):
+    msg = EmailMessage()
+    msg["Subject"] = "New Contact Form Submission"
+    msg["From"] = SMTP_USER
+    msg["To"] = TO_EMAIL
+
+    msg.set_content(f"""
+        New contact form submission:
+
+        Name: {data.get('name')}
+        Email: {data.get('email')}
+        Message: {data.get('message')}
+    """)
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASS)
+        server.send_message(msg)
+
+
+def send_contact_email(data):
+    msg = EmailMessage()
+    msg["Subject"] = "New Contact Form Submission"
+    msg["From"] = SMTP_USER
+    msg["To"] = TO_EMAIL
+
+    msg.set_content(f"""
+        New contact form submission:
+
+        Name: {data.get('name')}
+        Email: {data.get('email')}
+        Subject: {data.get('subject')}
+        Message: {data.get('message')}
+    """)
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASS)
+        server.send_message(msg)        

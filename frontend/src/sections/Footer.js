@@ -126,7 +126,7 @@ const handleSubmit = async (e) => {
   setResponseMessage(null);
 
   try {
-    const response = await fetch("/api/contact-form", {
+    const response = await fetch("/api/footer-contact-form", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)

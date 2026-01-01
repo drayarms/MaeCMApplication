@@ -27,7 +27,7 @@ export default function ContactPanel2() {
     setResponseMessage(null);
 
     try {
-      const response = await fetch("/api/contact-us2", {
+      const response = await fetch("/api/contact-form", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)

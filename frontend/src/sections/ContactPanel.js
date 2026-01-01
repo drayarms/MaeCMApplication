@@ -218,7 +218,7 @@ export default function ContactPanel() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/api/home-contact-form", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)

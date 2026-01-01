@@ -510,7 +510,7 @@ export default function Projects() {
       {/* LOAD MORE */}
       {hasMore && (
         <div className="projects-load-more">
-          <button className="gold-button" onClick={loadMore}>
+          <button className="light-background gold-button" onClick={loadMore}>
             {loading ? "loading..." : "SEE MORE OF OUR PROJECTS"}
           </button>
         </div>

@@ -538,6 +538,12 @@
   transform: translateY(0);
 }
 
+.scroll-top-btn:hover {
+  background: #ffd11a;
+  border: #f2f2f2;
+  color: #fff;
+}
+
 /* transition overlay */
 /*.transition-overlay {
   position: fixed;
@@ -1072,6 +1078,11 @@ footer a:hover {
 }
 
 .footerless-form.gold-button:hover {
+  background: #404040;
+  color: #f2f2f2;
+}
+
+.light-background.gold-button:hover {
   background: #404040;
   color: #f2f2f2;
 }
