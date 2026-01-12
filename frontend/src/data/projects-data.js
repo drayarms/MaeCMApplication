@@ -40,9 +40,9 @@ export const PROJECTS = [
   { image: img14, location: "Linda Flora", link: "linda-flora", types: ["Concrete/Structural", "Residential Construction"] },
   { image: img15, location: "Mulberry", link: "mulberry", types: ["Concrete/Structural", "Residential Construction"] },
   { image: img16, location: "Rising Glen", link: "rising-glen", types: ["Concrete/Structural", "Residential Construction"] },
-  { image: img17, location: "210 N. Kenmore", link: "210-n-kenmore-avenue", types: ["SB721 Inspections"] },
+  { image: img17, location: "210 N. Kenmore", link: "210-n-kenmore-avenue", types: ["SB721/SB362 Inspections"] },
   { image: img18, location: "15436 Milbank", link: "15436-milbank", types: ["ADU (Accessory Dwelling Unit)", "Residential Construction"] },
-  { image: img19, location: "515 N. Mariposa", link: "515-n-mariposa-avenue", types: ["SB721 Inspections"] },
+  { image: img19, location: "515 N. Mariposa", link: "515-n-mariposa-avenue", types: ["SB721/SB362 Inspections"] },
   { image: img20, location: "Arco Convenience Store", link: "arco-convenient-store", types: ["Commercial Construction"] },
   { image: img21, location: "Clinton", link: "clinton", types: [] },
   { image: img22, location: "Genesee", link: "genesee", types: ["Engineering & Associated Services", "Soft Story Retrofit"] },
@@ -57,6 +57,6 @@ export const FILTERS = [
   "Concrete/Structural",
   "Engineering & Associated Services",
   "Residential Construction",
-  "SB721 Inspections",
+  "SB721/SB362 Inspections",
   "Soft Story Retrofit"
 ];

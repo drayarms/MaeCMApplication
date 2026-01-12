@@ -1,23 +1,28 @@
-.transition-overlay {
+/*.transition-overlay {
   position: fixed;
   inset: 0;
   background: #ffffff;
-  z-index: 5000;       
+  z-index: 5000;
   display: flex;
   align-items: center;
   justify-content: center;
-}
+
+  opacity: 1;
+  transition: opacity 0.5s ease; 
+}*/
+
+/* fade class */
+/*.transition-overlay.fade-out {
+  opacity: 0;
+}*/
 
 /* 60px gold square spinning in X then Y axis */
-.flip-square {
+/*.flip-square {
   width: 60px;
   height: 60px;
   background: #ffd11a;
-  animation: flipGoldSquare 1.7s linear infinite;
+  animation: flipGoldSquare 1.7s linear infinite; 
 }
-
-
-
 
 @keyframes flipGoldSquare {
   0% {
@@ -35,5 +40,121 @@
   100% {
     transform: rotateX(0deg) rotateY(0deg);
   }
+}*/
+
+/* Background overlay (white) */
+/*.transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 5000;
 }
 
+
+.flip-square {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: #ffd11a;
+  animation: flipGoldSquare 1.7s linear infinite;
+  z-index: 5001;
+}
+
+@keyframes flipGoldSquare {
+  0% { transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg); }
+  25% { transform: translate(-50%, -50%) rotateX(180deg) rotateY(0deg); }
+  50% { transform: translate(-50%, -50%) rotateX(180deg) rotateY(180deg); }
+  75% { transform: translate(-50%, -50%) rotateX(0deg) rotateY(180deg); }
+  100% { transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg); }
+}*/
+
+
+/* White overlay */
+/*.transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 5000;
+  transition: opacity 0.3s ease;
+}*/
+
+/* Gold spinning square */
+/*.flip-square {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: #ffd11a;
+  z-index: 5001;
+  animation: flipGoldSquare 0.9s linear infinite;
+}*/
+
+/*@keyframes flipGoldSquare {
+  0% { transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg); }
+  25% { transform: translate(-50%, -50%) rotateX(180deg) rotateY(0deg); }
+  50% { transform: translate(-50%, -50%) rotateX(180deg) rotateY(180deg); }
+  75% { transform: translate(-50%, -50%) rotateX(0deg) rotateY(180deg); }
+  100% { transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg); }
+}*/
+
+/*@keyframes flipGoldSquare {
+  0% {
+    transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotateX(180deg) rotateY(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateX(180deg) rotateY(180deg);
+  }
+}*/
+
+
+
+.transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 5000;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.overlay-fade-out {
+  opacity: 0;
+}
+
+.flip-square {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  background: #ffd11a;
+  z-index: 5001;
+  transform-style: preserve-3d;
+  animation: flipGoldSquare 0.8s linear infinite;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.square-fade-out {
+  opacity: 0;
+}
+
+@keyframes flipGoldSquare {
+  0% {
+    transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotateX(180deg) rotateY(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateX(180deg) rotateY(180deg);
+  }
+}

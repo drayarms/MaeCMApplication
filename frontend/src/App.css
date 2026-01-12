@@ -188,13 +188,75 @@
 .toggler-lines::after { top: 8px; }
 
 /* hero */
-.hero-panel{
+/*.hero-panel{
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   position: relative;
   overflow: hidden;
+}*/
+
+
+
+/* Background layer */
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;                     /* NO negative inset */
+  background-image: var(--hero-bg);
+  background-repeat: no-repeat;
+  background-position: center -40%;
+  background-size: 125%;        /* zoom */
+  transform: translateY(var(--bg-offset, 0px));
+  will-change: transform;
+  z-index: 0;
 }
+
+
+/* Foreground content */
+.hero-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/*.hero-panel {
+  position: relative;
+  background: none;
+  display: flex;
+  align-items: center;    
+  justify-content: center;
+  overflow: hidden;
+  min-height: clamp(600px, 120vh, 880px);
+  transition: background-size 0.35s ease;
+}*/
+
+.hero-panel {
+  position: relative;
+  overflow: hidden;
+  background: none;
+  min-height: clamp(600px, 120vh, 880px);
+}
+
+
+@media (max-width: 991px) {
+  .hero-panel {
+    min-height: 140vh; /* taller than width */
+  }
+}
+
+@media (max-width: 875px) {
+  .hero-panel {
+    min-height: 160vh;
+  }
+
+  .hero-panel::before {
+    background-size: 240%; /* slightly more zoom for vertical framing */
+    background-position: center 15%;
+  }
+}
+
+
 
 /*.hero-overlay {
   color: white;
@@ -210,7 +272,14 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 18px;
+
+  /* Prevent bottom collision */
+  /*margin-bottom: clamp(2rem, 6vh, 4rem); */ 
+  margin-bottom: clamp(12rem, 8vh, 15rem);
 }
+
+
+
 
 /* Base state (before load) */
 .hero-item {
@@ -235,11 +304,21 @@
   font-weight: 600;
 }
 
-.big-bold-white-caption {
+/*.big-bold-white-caption {
   color: #fff;
   font-size: 3.7rem;
   font-weight: 800;
   line-height: 1.1;
+}*/
+
+.big-bold-white-caption {
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+
+  /* Responsive scaling */
+  font-size: clamp(0.8rem, 5vw, 4rem);
+
 }
 
 .gracefull-white-caption {
@@ -596,7 +675,7 @@
 
 /* Headings */
 .large_bold_white {
-  font-size: 5em;
+  font-size: 3.7rem;
   font-weight: 800;
   color: #fff;
   text-align: center;
@@ -649,7 +728,7 @@ footer .little-thin-gold-line {
 
 /* Text */
 .literature {
-  color: #8c8c8c;
+  color: #808080;
   text-align: center;
   font-size: 0.95rem;
   font-weight: 200;
@@ -1189,4 +1268,22 @@ footer a:hover {
     height: 300px;
   }
 }
+
+.footer {
+  background: #262626;
+}
+
+
+.white-panel .my-service-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.25s ease, text-decoration 0.25s ease;
+}
+
+.white-panel .my-service-link:hover,
+.white-panel .my-service-link:focus-visible {
+  color: #ffd11a;
+}
+
+
 

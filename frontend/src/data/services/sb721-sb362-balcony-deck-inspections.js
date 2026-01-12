@@ -1,11 +1,11 @@
 import bannerImg from "../../assets/Mae-CM-Services-Main-SB721-Deck-Balcony2-Inspections2.jpg";
 
-export const SB721_DECK_BALCONY_INSPECTIONS = {
+export const SB721_SB362_BALCONY_DECK_INSPECTIONS = {
   bannerImage: bannerImg,
-  bannerText: "SB721 Deck & Balcony Inspections",
-  heading: "SB721 Deck & Balcony Inspections",
-  projectType: "SB721 Inspections",
-  galleryCaption: "SB721 Deck & Balcony Inspections",
+  bannerText: "SB721/SB362 Balcony & Deck Inspections",
+  heading: "SB721/SB362 Balcony & Deck Inspections",
+  projectType: "SB721/SB362 Inspections",
+  galleryCaption: "SB721/SB362 Balcony & Deck Inspections",
 
   content: `
     <p>In September 2018, Senate Bill No. 721 (SB 721) was approved by Governor Jerry Brown, requiring 
@@ -29,7 +29,7 @@ export const SB721_DECK_BALCONY_INSPECTIONS = {
      The nonemergency repairs made under these provisions will be required to be completed within 120 
      days, unless an extension is granted by the local authorities.</p>
 
-    <p>Our SB721 Deck & Balcony Inspections Include:</p>
+    <p>Our SB721/SB362 Balcony & Deck Inspections Include:</p>
   `,
 
   bullets: [

@@ -4,15 +4,6 @@ import { Link } from "react-router-dom";
 import { PROJECTS } from "../data/projects-data";
 import Footer from "../sections/Footer";
 
-//export default function ServicePageTemplate({
-  //bannerImage,
-  //bannerText,
-  //heading,
-  //content,
-  //bullets,
-  //projectType,
-  //galleryCaption
-//}) {
 export default function ServicePageTemplate({
   seo,
   bannerImage,
@@ -49,42 +40,6 @@ export default function ServicePageTemplate({
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!isValid) return;
-
-    setLoading(true);
-    setError(null);
-    setResponseMessage(null);
-
-    try {
-      const response = await fetch("/api/contact-us", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Submission failed");
-      }
-
-      setResponseMessage(data.message || "Message sent successfully!");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: ""
-      });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };*/
 
   const handleSubmit = async (e) => {
     e.preventDefault();

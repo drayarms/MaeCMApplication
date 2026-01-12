@@ -39,4 +39,4 @@ export const SOFT_STORY_RETROFIT = {
     "Expertise",
     "Safety"
   ]
-};
+}; 

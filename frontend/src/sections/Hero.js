@@ -5,27 +5,6 @@ export default function Hero() {
   const heroRef = useRef();
 
   /*useEffect(() => {
-    const el = heroRef.current;
-    let ticking = false;
-
-    function onScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrolled = window.scrollY;
-          // move background at ~half the rate
-          el.style.backgroundPositionY = `${-scrolled * -0.5}px`;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);*/
-
-
-  /*useEffect(() => {
     const hero = heroRef.current;
     const items = hero.querySelectorAll(".hero-item");
 
@@ -37,13 +16,19 @@ export default function Hero() {
       }, delay);
     });
 
-    // ----- SCROLL FADE OUT / IN -----
+    // ----- SCROLL PARALLAX + FADE -----
     let ticking = false;
 
     function onScroll() {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const scrollY = window.scrollY;
+
+          //Background parallax (slower than page)
+          const parallaxSpeed = 0.3;
+          hero.style.backgroundPositionY = `${scrollY * parallaxSpeed}px`;
+
+          //Content fade out
           const fadePoint = 200;
           const opacity = Math.max(0, 1 - scrollY / fadePoint);
 
@@ -64,19 +49,20 @@ export default function Hero() {
 
 
 
+
   useEffect(() => {
     const hero = heroRef.current;
     const items = hero.querySelectorAll(".hero-item");
 
-    // ----- SEQUENTIAL LOAD ANIMATION -----
+    // ---- SEQUENTIAL LOAD ----
     items.forEach((item) => {
       const delay = Number(item.dataset.delay || 0);
-      setTimeout(() => {
-        item.classList.add("visible");
-      }, delay);
+      setTimeout(() => item.classList.add("visible"), delay);
     });
 
-    // ----- SCROLL PARALLAX + FADE -----
+    // ---- PARALLAX ----
+    const speed = 0.5;
+    const maxOffset = 120; // hard clamp (px)
     let ticking = false;
 
     function onScroll() {
@@ -84,11 +70,11 @@ export default function Hero() {
         window.requestAnimationFrame(() => {
           const scrollY = window.scrollY;
 
-          // 🔹 Background parallax (slower than page)
-          const parallaxSpeed = 0.3;
-          hero.style.backgroundPositionY = `${scrollY * parallaxSpeed}px`;
+          // Clamp parallax movement
+          const offset = Math.min(scrollY * speed, maxOffset);
+          hero.style.setProperty("--bg-offset", `${offset}px`);
 
-          // 🔹 Content fade out
+          // Fade content only
           const fadePoint = 200;
           const opacity = Math.max(0, 1 - scrollY / fadePoint);
 
@@ -109,30 +95,18 @@ export default function Hero() {
 
 
 
+
+
+
   return (
-    /*<section
-      ref={heroRef}
-      className="hero-panel d-flex align-items-center justify-content-center font-style"
-      style={{
-        backgroundImage: `url(${bg})`,
-        height: "600px",
-      }}
-    >*/
-
-
     <section
       ref={heroRef}
       className="hero-panel d-flex align-items-center justify-content-center font-style"
+      
       style={{
-        backgroundImage: `url(${bg})`,
-        height: "600px",
-        backgroundSize: "125%",          // zoom in
-        backgroundPosition: "center top",
-        backgroundRepeat: "no-repeat",
+        "--hero-bg": `url(${bg})`,
       }}
     >
-
-
 
       <div className="hero-overlay hero-content">
         <div className="hero-item gold-caption" data-delay="1600">

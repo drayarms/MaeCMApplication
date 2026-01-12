@@ -1,22 +1,3 @@
-/*import React from "react";
-
-export default function PageHeroTemplate({ backgroundImage, caption }) {
-  return (
-    <div
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        height: "25vh"
-      }}
-      className="d-flex flex-column justify-content-center align-items-center"
-    >
-      <h1 className="large_bold_white">{caption}</h1>
-      <div className="large-thin-gold-line" />
-    </div>
-  );
-}*/
-
 import React, { useMemo } from "react";
 
 /* ===============================

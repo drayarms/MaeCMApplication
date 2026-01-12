@@ -34,25 +34,3 @@ export default function SEO({
   );
 }
 
-
-
-
-/*SIMPLERimport { Helmet } from "react-helmet-async";
-
-export default function SEO({
-  title,
-  description,
-  canonical,
-  keywords,
-}) {
-  return (
-    <Helmet>
-      {title && <title>{title}</title>}
-      {description && (
-        <meta name="description" content={description} />
-      )}
-      {keywords && <meta name="keywords" content={keywords} />}
-      {canonical && <link rel="canonical" href={canonical} />}
-    </Helmet>
-  );
-}*/

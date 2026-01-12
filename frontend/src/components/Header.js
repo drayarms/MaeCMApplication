@@ -355,7 +355,7 @@ export default function Header() {
                     <NavLink
                       to="/services/soft-story-retrofit"
                       className={({ isActive }) =>
-                        `service-link ${isActive ? "active" : ""}`
+                        'service-link ${isActive ? "active" : ""}'
                       }
                       onClick={(e) => {
                         e.preventDefault();
@@ -370,7 +370,7 @@ export default function Header() {
                     <NavLink
                       to="/services/residential-remodel-renovations"
                       className={({ isActive }) =>
-                        `service-link ${isActive ? "active" : ""}`
+                        'service-link ${isActive ? "active" : ""}'
                       }
                       onClick={(e) => {
                         e.preventDefault();
@@ -385,7 +385,7 @@ export default function Header() {
                     <NavLink
                       to="/services/adu"
                       className={({ isActive }) =>
-                        `service-link ${isActive ? "active" : ""}`
+                        'service-link ${isActive ? "active" : ""}'
                       }
                       onClick={(e) => {
                         e.preventDefault();
@@ -398,16 +398,16 @@ export default function Header() {
 
                   <li className="service-item">
                     <NavLink
-                      to="/services/sb721-deck-balcony-inspections"
+                      to="/services/sb721-sb362-balcony-deck-inspections"
                       className={({ isActive }) =>
-                        `service-link ${isActive ? "active" : ""}`
+                        'service-link ${isActive ? "active" : ""}'
                       }
                       onClick={(e) => {
                         e.preventDefault();
-                        navigateWithTransition("/services/sb721-deck-balcony-inspections");
+                        navigateWithTransition("/services/sb721-sb362-balcony-deck-inspections");
                       }}
                     >
-                      SB721 DECK & BALCONY INSPECTIONS
+                      SB721/SB362 BALCONY & DECK INSPECTIONS
                     </NavLink>
                   </li>
 
@@ -430,7 +430,7 @@ export default function Header() {
                     <NavLink
                       to="/services/structural-concrete"
                       className={({ isActive }) =>
-                        `service-link ${isActive ? "active" : ""}`
+                        'service-link ${isActive ? "active" : ""}'
                       }
                       onClick={(e) => {
                         e.preventDefault();
@@ -445,7 +445,7 @@ export default function Header() {
                     <NavLink
                       to="/services/engineering-associated-services"
                       className={({ isActive }) =>
-                        `service-link ${isActive ? "active" : ""}`
+                        'service-link ${isActive ? "active" : ""}'
                       }
                       onClick={(e) => {
                         e.preventDefault();
@@ -464,7 +464,7 @@ export default function Header() {
               <NavLink
                 to="/contact-us"
                 className={({ isActive }) =>
-                  `nav-link custom-nav-link ${isActive ? "active" : ""}`
+                  'nav-link custom-nav-link ${isActive ? "active" : ""}'
                 }
                 onClick={(e) => {
                   e.preventDefault();
@@ -489,5 +489,5 @@ export default function Header() {
       </div>
     </header>
   );
-}
+}  
 

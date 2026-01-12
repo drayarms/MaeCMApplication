@@ -17,7 +17,7 @@ const staff = [
     text: "Massoud, our project coordinator, has thirty plus years of experience in the construction field, consulting, geotechnical engineering, and material testing. He provides support to not only all staff members but all clients as well. He pays meticulous attention to detail and is very hands-on, resulting in incredible finished projects."
   },
   {
-    name: "Fat Head",
+    name: "Vimla Gossai",
     img: require("../assets/staff/maecmservices-4.jpg"),
     text: "Vimla is our project/accounts manager. From actively being on jobsites to permit expediting and accounting, she is involved from the very beginning to the end of each project, ensuring our clients are satisfied in every phase of construction."
   },

@@ -1,55 +1,3 @@
-/*import React from "react";
-import { Link } from "react-router-dom";
-
-export default function CTAWide() {
-  return (
-    <div style={{ background: "#262626" }} className="py-5">
-      <div className="container d-flex flex-column align-items-start">
-        <h3 className="light-white-section-heading">
-          Contact us now for a free quote on your project
-        </h3>
-
-
-
-
-          <button className="gold-button mt-3">
-            CONTACT OUR TEAM
-          </button>
-
-
-
-      </div>
-    </div>
-  );
-}
-*/
-
-
-/*import React from "react";
-import { Link } from "react-router-dom";
-
-export default function CTAWide() {
-  return (
-
-    <div style={{ background: "#262626" }} className="py-5">
-      <div  className="container d-flex justify-content-between align-items-center">
-        <h3 className="light-white-section-heading mb-0">
-          Contact us now for a free quote on your project
-        </h3>
-
-        <a href="contact">
-          <button className="gold-button">
-            Contact Our Team
-          </button>
-        </a>
-      </div>
-    </div>
-
-  );
-}
-*/
-
-
 import React from "react";
 
 export default function CTAWide() {
@@ -67,7 +15,7 @@ export default function CTAWide() {
                 Contact us now for a free quote on your project
               </h3>
 
-              <a href="contact">
+              <a href="contact-us">
                 <button className="gold-button">
                   CONTACT OUT TEAM
                 </button>

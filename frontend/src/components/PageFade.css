@@ -1,35 +1,3 @@
-/*.page-fade {
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 450ms ease, transform 450ms ease;
-}
-
-.page-fade.visible {
-  opacity: 1;
-  transform: translateY(0);
-}*/
-
-/* Initial page state */
-/*.page-fade {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 350ms ease, transform 350ms ease;
-}*/
-
-/* Fade OUT before flip animation begins */
-/*.page-fade.fade-out {
-  opacity: 0;
-  transform: translateY(6px);
-}*/
-
-/* Fade IN once the flip animation finishes */
-/*.page-fade.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}*/
-
-
-
 /* Wrapper ensures pages stack correctly */
 .page-parallax-wrapper {
   position: relative;
