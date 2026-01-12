@@ -1,7 +1,7 @@
 
 /* Header */
 .site-header {
-  height: 100px;
+  min-height: 100px;
   background: #fff;
   box-shadow: none;
   z-index: 1000;
@@ -84,10 +84,6 @@
   color: #d4af37;
 }
 */
-
-
-
-
 
 .custom-nav-link {
   position: relative;
@@ -202,10 +198,11 @@
 .hero-panel::before {
   content: "";
   position: absolute;
+  inset: -20%; /**/
   inset: 0;                     /* NO negative inset */
   background-image: var(--hero-bg);
   background-repeat: no-repeat;
-  background-position: center -40%;
+  background-position: center top;
   background-size: 125%;        /* zoom */
   transform: translateY(var(--bg-offset, 0px));
   will-change: transform;
@@ -239,24 +236,38 @@
 }
 
 
-@media (max-width: 991px) {
+@media (max-width: 1250px) {
   .hero-panel {
-    min-height: 140vh; /* taller than width */
-  }
-}
-
-@media (max-width: 875px) {
-  .hero-panel {
-    min-height: 160vh;
+    min-height: 125vh; 
   }
 
   .hero-panel::before {
-    background-size: 240%; /* slightly more zoom for vertical framing */
-    background-position: center 15%;
-  }
+    background-size: 145%; /* slightly more zoom for vertical framing */
+    background-position: center top;
+  }  
 }
 
+@media (max-width: 991px) {
+  .hero-panel {
+    min-height: 120vh; 
+  }
 
+  .hero-panel::before {
+    background-size: 165%; /* slightly more zoom for vertical framing */
+    background-position: center top;
+  }  
+}
+
+@media (max-width: 575px) {
+  .hero-panel {
+    min-height: 100vh;
+  }
+
+  .hero-panel::before {
+    background-size: 245%; /* slightly more zoom for vertical framing */
+    background-position: center top;
+  }
+}
 
 /*.hero-overlay {
   color: white;
@@ -288,6 +299,7 @@
   transition:
     opacity 0.6s ease,
     transform 0.6s ease;
+  /*will-change: transform, opacity;*/
 }
 
 /* After load */

@@ -3,6 +3,7 @@ import bg from "../assets/background.jpg";
 
 export default function Hero() {
   const heroRef = useRef();
+  const contentRef = useRef();
 
   /*useEffect(() => {
     const hero = heroRef.current;
@@ -50,7 +51,7 @@ export default function Hero() {
 
 
 
-  useEffect(() => {
+  /*useEffect(() => {
     const hero = heroRef.current;
     const items = hero.querySelectorAll(".hero-item");
 
@@ -91,9 +92,187 @@ export default function Hero() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);*/
+
+
+  /*useEffect(() => {
+    const hero = heroRef.current;
+    const items = hero.querySelectorAll(".hero-item");
+
+    // ---- SEQUENTIAL LOAD ----
+    items.forEach((item) => {
+      const delay = Number(item.dataset.delay || 0);
+      setTimeout(() => item.classList.add("visible"), delay);
+    });
+
+    // ---- PARALLAX (RELATIVE TO HERO) ----
+    const speed = 0.35;
+    const maxOffset = 120;
+    let ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const rect = hero.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+
+          // Hero is visible
+          if (rect.bottom > 0 && rect.top < viewportHeight) {
+            const progress =
+              (viewportHeight - rect.top) / (viewportHeight + rect.height);
+
+            const offset = Math.min(progress * maxOffset * speed, maxOffset);
+            hero.style.setProperty("--bg-offset", `${offset}px`);
+          }
+
+          // ---- CONTENT FADE ----
+          const fadePoint = 200;
+          const scrolled = Math.max(0, -rect.top);
+          const opacity = Math.max(0, 1 - scrolled / fadePoint);
+
+          items.forEach((item) => {
+            item.style.opacity = opacity;
+            item.style.transform = `translateY(${20 * (1 - opacity)}px)`;
+          });
+
+          ticking = false;
+        });
+
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // run once on load
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);*/
+
+
+    useEffect(() => {
+    const hero = heroRef.current;
+    const items = hero.querySelectorAll(".hero-item");
+
+    // ---LET ENTRANCE ANIMATION FINISH---
+    const timeout = setTimeout(() => {
+      items.forEach((item) => {
+        item.style.transition = "none";
+      });
+    }, 700); //Slightly longer than 0.6s CSS transition
+
+    // ---- SEQUENTIAL LOAD ----
+    items.forEach((item) => {
+      const delay = Number(item.dataset.delay || 0);
+      setTimeout(() => item.classList.add("visible"), delay);
+    });
+
+    // ---- PARALLAX ----
+    const speed = 0.35;
+    const maxOffset = 560;
+    let ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const rect = hero.getBoundingClientRect();
+          const vh = window.innerHeight;
+
+          if (rect.bottom > 0 && rect.top < vh) {
+            const progress = Math.min(
+              Math.max(-rect.top / rect.height, 0),
+              1
+            );
+
+            //Background parallax
+            const bgOffset = progress * maxOffset;
+            hero.style.setProperty("--bg-offset", `${bgOffset}px`);
+
+            
+            //Content parallax (slower and synced)
+            //const contentOffset = progress //* 60; //smaller = slower
+            const contentOffset = -progress * (maxOffset * -1.01)
+            contentRef.current.style.transform = `translateY(${contentOffset}px)`
+
+            //Content fade
+            //const opacity = 1 - progress
+            const fadeSpeed = 1.4 //The larger, the faster elements fade
+            const opacity = Math.max(0, 1 - progress * fadeSpeed);
+            //Content FADE + DRIFT
+            //const opacity = 1 - progress;
+            //const drift = progress * 30; //px downward drift
+
+            items.forEach((item) => {
+              item.style.opacity = opacity;
+              //item.style.transform = `translateY(${drift}px)`;
+
+            });
+          }
+
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    // ---- PARALLAX ----
+    /*const speed = 0.35;
+    const maxOffset = 360;
+    let ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const rect = hero.getBoundingClientRect();
+          const vh = window.innerHeight;
+
+          if (rect.bottom > 0 && rect.top < vh) {
+            const progress = Math.min(
+              Math.max(-rect.top / rect.height, 0),
+              1
+            );
+
+            const offset = progress * maxOffset;
+            hero.style.setProperty("--bg-offset", `${offset}px`);
+
+
+
+
+
+            //Content parallax (slower and synced)
+            const contentOffset = progress //* 60; //smaller = slower
+            contentRef.current.style.transform = `translateY(${contentOffset}px)`
+
+            //Content fade
+            const opacity = 1 - progress
+
+            //Content FADE + DRIFT
+            //const opacity = 1 - progress;
+            //const drift = progress * 30; //px downward drift
+
+            items.forEach((item) => {
+              item.style.opacity = opacity;
+              //item.style.transform = `translateY(${drift}px)`;
+
+            });
+
+
+
+
+
+          }
+
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }*/
+
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-
 
 
 
@@ -108,7 +287,7 @@ export default function Hero() {
       }}
     >
 
-      <div className="hero-overlay hero-content">
+      <div ref={contentRef} className="hero-overlay hero-content">
         <div className="hero-item gold-caption" data-delay="1600">
           What We Do
         </div>
