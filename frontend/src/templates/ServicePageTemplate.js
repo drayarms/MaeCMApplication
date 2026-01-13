@@ -108,7 +108,7 @@ export default function ServicePageTemplate({
         style={{ backgroundImage: `url(${bannerImage})` }}
       >
         <div className="page-banner-overlay">
-          <div className="big-bold-white-caption">{bannerText}</div>
+          <div className="big-bold-white-caption service-page-caption">{bannerText}</div>
           <div className="large-thin-gold-line" />
         </div>
       </div>

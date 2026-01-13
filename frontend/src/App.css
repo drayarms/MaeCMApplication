@@ -328,9 +328,14 @@
   color: #ffffff;
   line-height: 1.1;
 
+  font-size: 3.7rem;
   /* Responsive scaling */
-  font-size: clamp(0.8rem, 5vw, 4rem);
+  font-size: clamp(3.7rem, 5vw, 4rem);
 
+}
+
+.service-page-caption {
+  text-align: center;
 }
 
 .gracefull-white-caption {
@@ -1296,6 +1301,4 @@ footer a:hover {
 .white-panel .my-service-link:focus-visible {
   color: #ffd11a;
 }
-
-
 
