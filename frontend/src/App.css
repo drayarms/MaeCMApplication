@@ -264,7 +264,7 @@
   }
 
   .hero-panel::before {
-    background-size: 245%; /* slightly more zoom for vertical framing */
+    background-size: 345%; /* slightly more zoom for vertical framing */
     background-position: center top;
   }
 }
