@@ -1302,3 +1302,81 @@ footer a:hover {
   color: #ffd11a;
 }
 
+
+
+/*ALL SERVICES*/
+.all-services-section {
+  padding: 4rem 0;
+}
+
+.all-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+
+@media (max-width: 992px) {
+  .all-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .all-services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.service-card {
+  display: grid;
+  grid-template-rows:
+    auto   /* image */
+    auto   /* caption */
+    auto   /* gold line */
+    1fr    /* text (equalized) */
+    auto;  /* button */
+}
+
+.service-image-wrapper {
+  display: block;
+  aspect-ratio: 1.52 / 1;
+  overflow: hidden;
+}
+
+.service-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-text-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-text.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.service-text.expanded {
+  display: block;
+}
+
+.service-more {
+  background: none;
+  border: none;
+  color: #c9a23f; /* gold-ish */
+  cursor: pointer;
+  padding: 0;
+  align-self: flex-start;
+  font-weight: 500;
+}
+
+.service-card-gold-button.gold-button:hover {
+  background: #404040;
+  color: #f2f2f2;
+}
+

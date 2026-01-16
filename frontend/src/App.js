@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
+import Services from "./pages/Services"
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import SoftStoryRetrofit from "./pages/services/SoftStoryRetrofit"; 
@@ -29,6 +30,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/services/soft-story-retrofit" element={<SoftStoryRetrofit />} />
             <Route path="/services/residential-remodel-renovations" element={<ResidentialRemodelRenovations />} />

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
+import { usePageTransition } from "../components/PageTransitionProvider";
 import bg from "../assets/background.jpg";
 
 export default function Hero() {
+  const { navigateWithTransition } = usePageTransition();
   const heroRef = useRef();
   const contentRef = useRef();
 
@@ -275,7 +277,10 @@ export default function Hero() {
   }, []);
 
 
-
+  const handleNav = (e, path) => {
+    e.preventDefault();
+    navigateWithTransition(path);
+  };
 
   return (
     <section
@@ -301,7 +306,12 @@ export default function Hero() {
         </div>
 
         <div className="hero-item" data-delay="450">
-          <a href="/services" className="gold-button">
+          <a
+            href="/services" className = "gold-button"
+              onClick={(e) =>
+              handleNav(e, "/services")
+            }
+          >
             OUR SERVICES
           </a>
         </div>
