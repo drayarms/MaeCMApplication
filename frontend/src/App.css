@@ -332,6 +332,19 @@
   }
 }*/
 
+@media (max-width: 768px) {
+  .hero-content .gold-caption {
+    font-size: 0.9rem;
+  }
+
+  .hero-content .big-bold-white-caption {
+    font-size: 2rem;
+  }
+
+  .hero-content .gracefull-white-caption {
+    font-size: 1rem;
+  }
+}
 
 
 
