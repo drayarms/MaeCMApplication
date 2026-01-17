@@ -288,6 +288,8 @@ import React, { useState } from "react";
 import logoImg from "../assets/logo.png";
 import { usePageTransition } from "../components/PageTransitionProvider";
 import { NavLink, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -298,6 +300,17 @@ export default function Header() {
   // SERVICES is active when any descendant route is active
   const isServicesActive = location.pathname.startsWith("/services");
 
+  const closeMobileMenus = () => { //Ensures menu closes immediately when menu item is clicked
+    setIsOpen(false);
+    setServicesOpen(false);
+  };  
+
+  useEffect(() => { //optional but recommended. Prevent background scroll on iOS
+    setIsOpen(false);
+    setServicesOpen(false);
+  }, [location.pathname]);
+
+
   return (
     <header className="site-header d-flex align-items-center px-3">
       <div className="container-fluid d-flex align-items-center justify-content-between">
@@ -306,7 +319,11 @@ export default function Header() {
           <span
             className="logo-link"
             style={{ cursor: "pointer" }}
-            onClick={() => navigateWithTransition("/")}
+            //onClick={() => navigateWithTransition("/")}
+            onClick={() => {
+              closeMobileMenus();
+              navigateWithTransition("/");
+            }}
           >
             <img src={logoImg} alt="logo" className="site-logo" />
           </span>
@@ -325,6 +342,7 @@ export default function Header() {
                 }
                 onClick={(e) => {
                   e.preventDefault();
+                  closeMobileMenus();
                   navigateWithTransition("/about-us");
                 }}
               >
@@ -359,6 +377,7 @@ export default function Header() {
                       }
                       onClick={(e) => {
                         e.preventDefault();
+                        closeMobileMenus();
                         navigateWithTransition("/services/soft-story-retrofit");
                       }}
                     >
@@ -374,6 +393,7 @@ export default function Header() {
                       }
                       onClick={(e) => {
                         e.preventDefault();
+                        closeMobileMenus();
                         navigateWithTransition("/services/residential-remodel-renovations");
                       }}
                     >
@@ -389,6 +409,7 @@ export default function Header() {
                       }
                       onClick={(e) => {
                         e.preventDefault();
+                        closeMobileMenus();
                         navigateWithTransition("/services/adu");
                       }}
                     >
@@ -404,6 +425,7 @@ export default function Header() {
                       }
                       onClick={(e) => {
                         e.preventDefault();
+                        closeMobileMenus();
                         navigateWithTransition("/services/sb721-sb362-balcony-deck-inspections");
                       }}
                     >
@@ -419,6 +441,7 @@ export default function Header() {
                       }
                       onClick={(e) => {
                         e.preventDefault();
+                        closeMobileMenus();
                         navigateWithTransition("/services/commercial-construction");
                       }}
                     >
@@ -434,6 +457,7 @@ export default function Header() {
                       }
                       onClick={(e) => {
                         e.preventDefault();
+                        closeMobileMenus();
                         navigateWithTransition("/services/structural-concrete");
                       }}
                     >
@@ -449,6 +473,7 @@ export default function Header() {
                       }
                       onClick={(e) => {
                         e.preventDefault();
+                        closeMobileMenus();
                         navigateWithTransition("/services/engineering-associated-services");
                       }}
                     >
@@ -468,6 +493,7 @@ export default function Header() {
                 }
                 onClick={(e) => {
                   e.preventDefault();
+                  closeMobileMenus();
                   navigateWithTransition("/contact-us");
                 }}
               >
