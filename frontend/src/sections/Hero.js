@@ -194,6 +194,11 @@ export default function Hero() {
             //const contentOffset = progress //* 60; //smaller = slower
             const contentOffset = -progress * (maxOffset * -1.01)
             contentRef.current.style.transform = `translateY(${contentOffset}px)`
+            //const isMobile = window.innerWidth <= 768;
+            //contentRef.current.style.transform = isMobile
+              //? `translate(-50%, ${contentOffset}px)`
+              //: `translateY(${contentOffset}px)`
+
 
             //Content fade
             //const opacity = 1 - progress
