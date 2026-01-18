@@ -49,7 +49,8 @@ export default function PortfolioPage() {
 	//if (!project) return <Navigate to="/portfolio" replace />;
 
 	if (!project) {
-		return (
+		return <Navigate to="/404" replace />;
+		/*return (
 			<div style={{ padding: "6rem 1rem", textAlign: "center" }}>
 				<h2 className="section-heading">Project not found</h2>
 				<p className="literature" style={{ marginTop: "1rem" }}>
@@ -61,7 +62,7 @@ export default function PortfolioPage() {
 					</TransitionLink>
 				</div>
 			</div>
-		);
+		);*/
 	}	
 
 	const headers = [

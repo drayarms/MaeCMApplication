@@ -1440,6 +1440,11 @@ footer a:hover {
 }
 
 
+.not-found-gold-button.gold-button:hover {
+  background: #404040;
+  color: #f2f2f2;
+}
+
 
 /* ===============================
   PORTFOLIO: INFO TABLE

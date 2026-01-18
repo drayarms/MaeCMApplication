@@ -20,6 +20,8 @@ import Header from "./components/Header";
 import ScrollTopButton from "./components/ScrollTopButton";
 import PageTransitionProvider from "./components/PageTransitionProvider";
 import PageWrapper from "./components/PageWrapper"; // <- import the wrapper
+import NotFound from "./pages/NotFound";
+
 
 
 import "./App.css";
@@ -55,6 +57,9 @@ function App() {
                 )
               }
             />
+
+            <Route path="*" element={<NotFound />} />
+
 
           </Routes>
         </PageWrapper>
