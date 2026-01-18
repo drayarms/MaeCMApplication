@@ -1,5 +1,6 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+//import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Services from "./pages/Services"
@@ -12,6 +13,8 @@ import SB721SB362BalconyDeckInspections from "./pages/services/SB721SB362Balcony
 import CommercialConstruction from "./pages/services/CommercialConstruction"; 
 import StructuralConcrete from "./pages/services/StructuralConcrete"; 
 import EngineeringAssociatedServices from "./pages/services/EngineeringAssociatedServices"; 
+import PortfolioPage from "./pages/PortfolioPage";
+import { PROJECTS } from "./data/projects-data";
 
 import Header from "./components/Header";
 import ScrollTopButton from "./components/ScrollTopButton";
@@ -39,6 +42,20 @@ function App() {
             <Route path="/services/commercial-construction" element={<CommercialConstruction />} /> 
             <Route path="/services/structural-concrete" element={<StructuralConcrete />} /> 
             <Route path="/services/engineering-associated-services" element={<EngineeringAssociatedServices />} /> 
+            
+            {/* Portfolio */}
+            <Route path="/portfolio/:slug" element={<PortfolioPage />} />
+            <Route
+              path="/portfolio"
+              element={
+                PROJECTS?.length ? (
+                  <Navigate to={`/portfolio/${PROJECTS[0].link}`} replace />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+
           </Routes>
         </PageWrapper>
       </main>
@@ -48,4 +65,6 @@ function App() {
 }
 
 export default App;
+
+
 

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
+import TransitionLink from "../components/TransitionLink";
 
 /* ===============================
    PROJECT DATA
@@ -42,7 +43,7 @@ export default function Projects() {
         {FILTERS.map(f => (
           <span
             key={f}
-            className={'mini-white-section-heading filter-item ${activeFilter === f ? "active" : ""}'}
+            className={`mini-white-section-heading filter-item ${activeFilter === f ? "active" : ""}`}
             onClick={() => changeFilter(f)}
           >
             {f}
@@ -53,9 +54,10 @@ export default function Projects() {
       {/* IMAGE GRID */}
       <div className="projects-grid">
         {visibleProjects.map(project => (
-          <Link
+
+          /*<Link
             key={project.link}
-            to={'/portfolio_page/${project.link}'}
+            to={`/portfolio_page/${project.link}`}
             className="project-tile"
             title={project.location}
           >
@@ -70,7 +72,25 @@ export default function Projects() {
                 </div>
               </div>
             </div>
-          </Link>
+          </Link>*/
+
+          <TransitionLink
+            key={project.link}
+            to={`/portfolio/${project.link}`}
+            className="project-tile"
+            title={project.location}
+          >
+            <div
+              className="project-image"
+              style={{ backgroundImage: `url(${project.image})` }}
+            >
+              <div className="project-overlay">
+                <div className="overlay-title">{project.location}</div>
+                <div className="overlay-sub">{project.types.join(" / ")}</div>
+              </div>
+            </div>
+          </TransitionLink>
+
         ))}
       </div>
 

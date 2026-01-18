@@ -1439,3 +1439,232 @@ footer a:hover {
   color: #f2f2f2;
 }
 
+
+
+/* ===============================
+  PORTFOLIO: INFO TABLE
+================================ */
+.portfolio-info-section {
+  padding: 3rem 1rem;
+}
+
+.portfolio-info-table {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.portfolio-info-cell {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 30px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.portfolio-info-cell:nth-child(8),
+.portfolio-info-cell:nth-child(16) {
+  border-right: none;
+}
+
+.portfolio-info-head {
+  background: #ffcc00;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.portfolio-info-body {
+  font-size: 0.95rem;
+}
+
+/* Mobile: stack, collapses gracefully */
+@media (max-width: 992px) {
+  .portfolio-info-table {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-info-head,
+  .portfolio-info-body {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .portfolio-info-cell {
+    border-right: none;
+  }
+}
+
+.portfolio-info-table {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr)); /* 8 headers/values */
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 0.5px solid #000; /* outer border */
+}
+
+.portfolio-info-cell {
+  border: 0.5px solid #000; /* cell borders */
+  padding: 0.75rem 0.5rem;
+}
+
+/* ===============================
+  PORTFOLIO: GALLERY (3 per row)
+================================ */
+.portfolio-gallery {
+  padding: 1rem 1rem 3rem;
+}
+
+.portfolio-gallery-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.portfolio-gallery-tile {
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.portfolio-gallery-image {
+  width: 100%;
+  padding-top: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 992px) {
+  .portfolio-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575px) {
+  .portfolio-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===============================
+  RELATED PROJECTS (up to 4 cols)
+================================ */
+.portfolio-related {
+  padding: 2rem 1rem 4rem;
+}
+
+.portfolio-related-heading {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.portfolio-related-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+
+/* collapses naturally */
+@media (max-width: 992px) {
+  .portfolio-related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575px) {
+  .portfolio-related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.portfolio-related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.portfolio-related-link {
+  text-decoration: none;
+}
+
+.portfolio-related-image {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 1px;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+.portfolio-related-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  transform: scale(1);
+  transition: transform 0.25s ease;
+}
+
+.portfolio-related-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease;
+}
+
+.portfolio-related-btn {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.portfolio-related-image:hover::before {
+  transform: scale(1.08);
+}
+
+.portfolio-related-image:hover .portfolio-related-overlay {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+
+.portfolio-related-image:hover .portfolio-related-btn {
+  opacity: 1;
+}
+
+.portfolio-related-title {
+  text-align: center;
+}
+
+.portfolio-related-types {
+  text-align: center;
+  font-weight: 200;
+  font-size: 0.8em;
+  color: #ffad33;
+}
