@@ -117,17 +117,24 @@ export default function PortfolioPage() {
 
 			<section className="portfolio-info-section">
 				<div className="portfolio-info-table">
-					{headers.map((h) => (
-						<div key={h} className="portfolio-info-cell portfolio-info-head">
-							{h}
-						</div>
+					
+
+
+
+
+					{headers.map((h, i) => (
+					  <React.Fragment key={h}>
+					    <div className="portfolio-info-cell portfolio-info-head">
+					      {h}
+					    </div>
+					    <div className="portfolio-info-cell portfolio-info-body literature">
+					      {values[i] || "\u00A0"}
+					    </div>
+					  </React.Fragment>
 					))}
 
-					{values.map((v, idx) => (
-						<div key={idx} className="portfolio-info-cell portfolio-info-body literature">
-							{v || "\u00A0"}
-						</div>
-					))}
+
+
 
 				</div>
 			</section>

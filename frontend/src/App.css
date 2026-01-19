@@ -1551,44 +1551,78 @@ footer a:hover {
 /* ===============================
   PORTFOLIO: INFO TABLE
 ================================ */
+/* ===============================
+  PORTFOLIO: INFO TABLE (responsive)
+================================ */
 .portfolio-info-section {
   padding: 3rem 1rem;
 }
 
-.portfolio-info-table {
+/*.portfolio-info-table {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
   max-width: 1200px;
   margin: 0 auto;
+  border: 0.5px solid #000;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
 }
 
 .portfolio-info-cell {
-  padding: 1rem;
+  border: 0.5px solid #000;
+  padding: 0.75rem 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 30px;
+
+  
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}*/
+
+
+.portfolio-info-table {
+  display: grid;
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 0.5px solid #000;
+
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
+
+  /* key: fill column-by-column so each header sits above its value */
+  grid-auto-flow: column;
+}
+
+.portfolio-info-cell {
+  border: 0.5px solid #000;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .portfolio-info-table {
+    grid-template-columns: minmax(140px, 0.9fr) 1fr; /* label | value */
+    grid-template-rows: none;
+    grid-auto-flow: row; /* now fill row-by-row */
+  }
+
+  .portfolio-info-head,
+  .portfolio-info-body {
+    justify-content: flex-start;
+    text-align: left;
+  }
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-.portfolio-info-cell:nth-child(8),
-.portfolio-info-cell:nth-child(16) {
-  border-right: none;
-}
 
 .portfolio-info-head {
   background: #ffcc00;
@@ -1603,8 +1637,22 @@ footer a:hover {
   font-size: 0.95rem;
 }
 
-/* Mobile: stack, collapses gracefully */
-@media (max-width: 992px) {
+/* 8 -> 4 columns sooner */
+@media (max-width: 1200px) {
+  .portfolio-info-table {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* 4 -> 2 columns */
+@media (max-width: 768px) {
+  .portfolio-info-table {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 2 -> 1 column */
+@media (max-width: 575px) {
   .portfolio-info-table {
     grid-template-columns: 1fr;
   }
@@ -1614,29 +1662,15 @@ footer a:hover {
     justify-content: flex-start;
     text-align: left;
   }
-
-  .portfolio-info-cell {
-    border-right: none;
-  }
 }
 
-.portfolio-info-table {
-  display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr)); /* 8 headers/values */
-  max-width: 1200px;
-  margin: 0 auto;
-  border: 0.5px solid #000; /* outer border */
-}
 
-.portfolio-info-cell {
-  border: 0.5px solid #000; /* cell borders */
-  padding: 0.75rem 0.5rem;
-}
+
 
 /* ===============================
   PORTFOLIO: GALLERY (3 per row)
 ================================ */
-.portfolio-gallery {
+/*.portfolio-gallery {
   padding: 1rem 1rem 3rem;
 }
 
@@ -1656,6 +1690,41 @@ footer a:hover {
 .portfolio-gallery-image {
   width: 100%;
   padding-top: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}*/
+
+.portfolio-gallery {
+  padding: 1rem 1rem 3rem;
+}
+
+.portfolio-gallery-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+
+  display: grid;
+  gap: 18px;
+
+  /* auto-fit collapses unused columns */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+  /* centers last row */
+  justify-content: center;
+}
+
+/* cap how wide a single tile can grow */
+.portfolio-gallery-tile {
+  width: 100%;
+  max-width: 380px;     
+  margin-inline: auto; /* center tile in its grid track */
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.portfolio-gallery-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
