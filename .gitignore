@@ -5,3 +5,4 @@ README
 .venv
 backend/test_smtp.py
 backend/send_test_email.py
+frontend/public/assets

@@ -73,6 +73,42 @@
 
 
 
+/* Visibility control */
+.header-top-desktop-only {
+  display: inline-flex;
+}
+
+.header-top-mobile-only {
+  display: none;
+}
+
+/* Mobile override */
+@media (max-width: 575px) {
+  .header-top-strip-inner {
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .header-top-desktop-only {
+    display: none;
+  }
+
+  .header-top-mobile-only {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 575px) {
+  .header-top-link {
+    padding: 2px 4px;
+  }
+}
+
+
+
+
+
+
 
 
 
@@ -1165,6 +1201,13 @@ footer a:hover {
   object-fit: cover;
 }
 
+.carousel-track.is-animating {
+  transition: transform 0.6s ease-in-out;
+}
+
+.carousel-track.no-anim {
+  transition: none;
+}
 
 
 .about-the-company-leterature{

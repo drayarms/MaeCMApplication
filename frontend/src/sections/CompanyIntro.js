@@ -4,7 +4,7 @@ import ImageCarousel from "./ImageCarousel";
 export default function CompanyIntro() {
   return (
     <div className="container py-5">
-      <div className="row align-items-center">
+      <div className="row align-items-start">
         <div className="col-md-6 text-center">
           <h3 className="section-heading company_intro_heading">Get to Know Our Company</h3>
           <div className="little-thin-gold-line" />

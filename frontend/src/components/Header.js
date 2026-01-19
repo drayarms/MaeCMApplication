@@ -262,7 +262,8 @@ export default function Header() {
   return (
     <header className="site-header">
       {showTopStrip && (
-        <div className="header-top-strip">
+
+        /*<div className="header-top-strip">
           <div className="container-fluid header-top-strip-inner">
             <span className="header-top-item">
               <i className="fa fa-phone" aria-hidden="true" />{" "}
@@ -276,7 +277,46 @@ export default function Header() {
               <span>6137 Wilshire Blvd, Los Angeles, CA 90048, USA</span>
             </span>
           </div>
+        </div>*/
+
+        <div className="header-top-strip">
+          <div className="container-fluid header-top-strip-inner">
+
+            {/* Phone (always visible) */}
+            <span className="header-top-item">
+              <i className="fa fa-phone" aria-hidden="true" />
+              <a href="facetime:3105511500" className="header-top-link">
+                +(310)551-1500
+              </a>
+            </span>
+
+            {/* Desktop: location */}
+            <span className="header-top-item header-top-desktop-only">
+              <i className="fa fa-map-marker" aria-hidden="true" />
+              <span>
+                6137 Wilshire Blvd, Los Angeles, CA 90048, USA
+              </span>
+            </span>
+
+            {/* Mobile: contact us */}
+            {/*<span className="header-top-item header-top-mobile-only">*/}
+            <span className="header-top-item">
+              <i className="fa fa-envelope" aria-hidden="true" />
+              <NavLink
+                to="/contact-us"
+                className="header-top-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateWithTransition("/contact-us");
+                }}
+              >
+                Contact Us
+              </NavLink>
+            </span>
+
+          </div>
         </div>
+
       )}
 
       <div className="header-main d-flex align-items-center px-3">
