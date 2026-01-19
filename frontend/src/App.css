@@ -18,6 +18,66 @@
   gap: 2rem;
 }
 
+
+
+
+
+
+
+/* Header top strip */
+.header-top-strip {
+  height: 30px;
+  background: #262626;
+  font-weight: 300;
+  width: 100%;
+}
+
+.header-top-strip-inner {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* or space-between if you prefer */
+  gap: 18px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.header-top-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.header-top-item i {
+  margin-right: 6px;
+}
+
+/* link inherits white */
+.header-top-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.header-top-link:hover {
+  text-decoration: none;
+}
+
+/* keep your existing header styling working */
+.header-main {
+  min-height: 100px;
+  background: #fff;
+}
+
+
+
+
+
+
+
+
+
+
 .custom-nav-link {
   color: #000;
   cursor: pointer;

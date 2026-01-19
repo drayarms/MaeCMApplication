@@ -11,9 +11,9 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="MAE CM Home"
-        description="Learn more about MAE CM Services, a trusted construction and engineering firm with over 35 years of experience."
-        keywords="construction company Los Angeles, MAE CM, engineering services"
+        title="Home - MaeCMServices Construction Management"
+        description="MAE CM Services is a licensed California general contractor with over 35 years of experience in engineering and construction. We specialize in structural concrete, soft story retrofits, ADUs, inspections, and commercial and residential construction—delivering safe, compliant, and high-quality projects statewide."
+        keywords="general contractor California, engineering and construction services, structural concrete, soft story retrofit, ADU construction, SB 721 inspection, commercial construction, residential construction, seismic retrofit California, licensed contractor, construction management, MAE CM Services"
         url="https://maecmservices.com"
       />
       <Hero />
