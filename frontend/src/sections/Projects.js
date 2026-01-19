@@ -55,25 +55,6 @@ export default function Projects() {
       <div className="projects-grid">
         {visibleProjects.map(project => (
 
-          /*<Link
-            key={project.link}
-            to={`/portfolio_page/${project.link}`}
-            className="project-tile"
-            title={project.location}
-          >
-            <div
-              className="project-image"
-              style={{ backgroundImage: `url(${project.image})` }}
-            >
-              <div className="project-overlay">
-                <div className="overlay-title">{project.location}</div>
-                <div className="overlay-sub">
-                  {project.types.join(" / ")}
-                </div>
-              </div>
-            </div>
-          </Link>*/
-
           <TransitionLink
             key={project.link}
             to={`/portfolio/${project.link}`}

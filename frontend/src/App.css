@@ -914,11 +914,11 @@ a.gold-button:focus-visible {
 
 
 .form-control.contact-form-text {
-  background-color: #404040;
+  background-color: #333333;
   /*color: #ff0000;*/
   font-weight: 350;
-  font-size: 0.85rem;
-  border: 1px solid #555;
+  font-size: 0.75rem;
+  border: 0.5px solid #333333;
   border-radius: 1px;
   padding: 0.6rem 0.75rem;
 }
@@ -932,15 +932,12 @@ a.gold-button:focus-visible {
 /* Focus state */
 .form-control.contact-form-text:focus,
 .form-control.contact-form-text:focus-visible {
-  /*color: #ffd11a;*/
-  background-color: #404040;
+  color: #ffd11a;
+  background-color: #333333;
   border-color: #ffd11a;
   outline: none;
   box-shadow: none; /* removes Bootstrap halo */
 }
-
-
-
 
 
 .form-control.contact-form-text:focus,
@@ -971,7 +968,7 @@ a.gold-button:focus-visible {
 /* Textarea resize control (optional, cleaner look) */
 .contact-form-text textarea,
 textarea.contact-form-text {
-  resize: vertical;
+  resize: none;
 }
 
 

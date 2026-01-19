@@ -50,7 +50,7 @@ export default function ServicePageTemplate({
     setResponseMessage(null);
 
     try {
-      const response = await fetch("/api/contact-us", {
+      const response = await fetch("/api/contact-form", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
@@ -99,7 +99,9 @@ export default function ServicePageTemplate({
       {/* ===============================
          SEO
       ================================ */}
-      {seo && <SEO {...seo} />}    
+      {seo && <SEO {...seo} />}
+       
+
       {/* ===============================
          PAGE BANNER
       ================================ */}
@@ -206,7 +208,7 @@ export default function ServicePageTemplate({
           {projects.map(project => (
             <Link
               key={project.link}
-              to={`/portfolio_page/${project.link}`}
+              to={`/portfolio/${project.link}`}
               className="project-tile"
             >
               <div

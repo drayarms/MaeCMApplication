@@ -1,6 +1,16 @@
 import bannerImg from "../../assets/slide-2.jpg";
 
 export const ENGINEERING_ASSOCIATED_SERVICES = {
+
+  title: "Engineering & Associated Services",
+  seo: {
+    title: "Engineering & Associated Services - MaeCMSevices Construction Management",
+    description:
+      "MAE CM Services provides comprehensive engineering and architectural services, including design-build, agency approvals, THP compliance, and housing department clearances. We collaborate across disciplines and offer full project and construction management for seamless project delivery.",
+    canonical: "https://maecmservices.com/services/engineering-associated-services",
+    keywords: "engineering services, architectural design services, design build, construction management, project management, agency approvals, THP compliance, tenant habitability program, housing department clearance, multidisciplinary collaboration, MEP coordination, structural engineering, commercial engineering services, residential engineering services",
+  },
+
   bannerImage: bannerImg,
   bannerText: "Engineering & Associated Services",
   heading: "Engineering & Associated Services",

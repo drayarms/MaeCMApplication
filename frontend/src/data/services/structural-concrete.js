@@ -1,6 +1,16 @@
 import bannerImg from "../../assets/title_image.jpg";
 
 export const STRUCTURAL_CONCRETE = {
+
+  title: "Structural Concrete",
+  seo: {
+    title: "Structural Concrete - MaeCMSevices Construction Management",
+    description:
+      "MAE CM Services provides expert structural concrete solutions, including foundation work, earthquake retrofitting, retaining walls, and hillside repairs. With an in-house crew and direct supervision, we handle underpinning, shoring, and structural reinforcement to ensure long-term safety and stability.",
+    canonical: "https://maecmservices.com/services/structural-concrete",
+    keywords: "structural concrete, foundation work, earthquake retrofit, retaining walls, hillside repairs, caisson construction, slab foundation, underpinning services, shoring systems, structural steel, reinforcing steel, structural framing, foundation repair, building reinforcement, seismic retrofitting",
+  },
+
   bannerImage: bannerImg,
   bannerText: "Structural Concrete",
   heading: "Structural Concrete",

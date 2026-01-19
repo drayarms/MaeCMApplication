@@ -1,6 +1,16 @@
 import bannerImg from "../../assets/Mae-CM-Services-Main-SB721-Deck-Balcony2-Inspections2.jpg";
 
 export const SB721_SB362_BALCONY_DECK_INSPECTIONS = {
+
+  title: "SB721/SB362 Balcony & Deck Inspections",
+  seo: {
+    title: "SB721/SB362 Balcony & Deck Inspections - MaeCMSevices Construction Management",
+    description:
+      "MAE CM Services provides SB 721 and SB 362 balcony and deck inspections for multifamily properties in California. Our licensed professionals assess exterior elevated elements, identify safety hazards, ensure structural integrity, and help property owners meet state inspection and reporting requirements.",
+    canonical: "https://maecmservices.com/services/sb721-sb362-balcony-deck-inspections",
+    keywords: "SB 721 inspection, SB 362 inspection, balcony inspection, deck inspection, exterior elevated elements, multifamily building inspection, California senate bill 721, structural integrity inspection, building safety inspection, periodic inspections, accident prevention, deck safety compliance, balcony safety standards, housing unit inspections, collapse prevention",
+  },
+
   bannerImage: bannerImg,
   bannerText: "SB721/SB362 Balcony & Deck Inspections",
   heading: "SB721/SB362 Balcony & Deck Inspections",

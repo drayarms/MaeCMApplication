@@ -11,8 +11,8 @@ export default function SoftStoryRetrofit() {
     <>
       <SEO
         title="About US - MaeCMServices Construction Management"
-        description="Learn more about MAE CM Services, a trusted construction and engineering firm with over 35 years of experience."
-        keywords="construction company Los Angeles, MAE CM, engineering services"
+        description="MAE CM Services is a licensed general contractor with over 35 years of experience in engineering and construction. We deliver structural reinforcement, new construction, ADU conversions, regulatory compliance, and commercial and residential projects with professionalism, quality, and trust."
+        keywords="general contractor, construction company California, engineering and construction services, structural reinforcement, ADU conversions, regulatory compliance construction, commercial construction, residential construction, licensed general contractor, construction management, building compliance projects, California contractors license, MAE CM Services"
         url="https://maecmservices.com/about-us"
       />    
       <AboutHero />

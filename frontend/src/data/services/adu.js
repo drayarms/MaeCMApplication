@@ -1,6 +1,16 @@
 import bannerImg from "../../assets/Mae-CM-Services-MainADU-Accessory-Dwelling-Unit.jpg";
 
 export const A_D_U = {
+
+  title: "ADU (Accessory Dwelling Unit)",
+  seo: {
+    title: "ADU (Accessory Dwelling Unit) - MaeCMSevices Construction Management",
+    description:
+      "MAE specializes in ADU (Accessory Dwelling Unit) design, permitting, and construction. From planning and zoning to full-service builds, we deliver compliant, high-quality ADU solutions that increase property value, generate income, and maximize usable space.",
+    canonical: "https://maecmservices.com/services/adu",
+    keywords: "ADU construction, accessory dwelling unit, ADU design, ADU permitting, ADU zoning, ADU planning, ADU architecture, ADU engineering, ADU inspection, ADU code compliance, property development, ADU conversions, backyard ADU, garage conversion ADU, income property ADU, residential ADU service",
+  },  
+
   bannerImage: bannerImg,
   bannerText: "ADU (Accessory Dwelling Unit)",
   heading: "ADU (Accessory Dwelling Unit)",

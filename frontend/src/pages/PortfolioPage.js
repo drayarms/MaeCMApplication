@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useParams, Navigate } from "react-router-dom";
+import SEO from "../components/SEO";
 import TransitionLink from "../components/TransitionLink";
 
 import { PROJECTS } from "../data/projects-data";
@@ -65,6 +66,14 @@ export default function PortfolioPage() {
 		);*/
 	}	
 
+	const title = project.seo?.title || `${project.title} - MaeCMServices Portfolio`;
+
+	const description = project.seo?.description || project.summary || "Project details and scope.";
+
+	const keywords = project.seo?.keywords || "construction, engineering, project portfolio";
+
+	const url = project.seo?.url //|| `${BASE_URL}/portfolio/${project.link}`;	
+
 	const headers = [
 		"Project Type",
 		"Project Name",
@@ -94,6 +103,16 @@ export default function PortfolioPage() {
 
 	return (
 		<>
+
+	      <SEO
+	        title={title}
+	        description={description}
+	        keywords={keywords}
+	        url={url}
+	        // if your SEO component supports these:
+	        // image={project.seo?.image}
+	      />
+
 			<PortfolioHero caption={project.location} />
 
 			<section className="portfolio-info-section">

@@ -23,39 +23,9 @@ import img22 from "../assets/cc0fb517-afa0-4609-a63e-70fb4dd07c4c-min-1000x1000.
 import img23 from "../assets/2a0386fc-a5dc-4e56-b163-8691d4293ad2-min-1000x1000.jpg";
 import img24 from "../assets/384ad846-e699-42f0-8717-407d90379331-min-570x570.jpg";
 
-/*export const PROJECTS = [
-  { image: img1, location: "N. Manhattan", link: "n-manhattan", types: ["Concrete/Structural", "Engineering & Associated Services", "Soft Story Retrofit"] },
-  { image: img2, location: "Chochran", link: "chochran", types: ["Concrete/Structural", "Engineering & Associated Services", "Soft Story Retrofit"] },
-  { image: img3, location: "Holt", link: "holt", types: ["Concrete/Structural", "Engineering & Associated Services", "Soft Story Retrofit"] },
-  { image: img4, location: "S. Manhattan", link: "s-manhattan", types: ["Concrete/Structural", "Engineering & Associated Services", "Soft Story Retrofit"] },
-  { image: img5, location: "Robertson", link: "robertson", types: ["Commercial Construction", "Concrete/Structural", "Engineering & Associated Services"] },
-  { image: img6, location: "N. Westmoreland 1", link: "n-westmoreland1", types: ["ADU (Accessory Dwelling Unit)", "Engineering & Associated Services"] },
-  { image: img7, location: "N. Westmoreland 2", link: "n-westmoreland2", types: ["ADU (Accessory Dwelling Unit)", "Engineering & Associated Services"] },
-  { image: img8, location: "Poinsettia Pl", link: "poinsettia-pl", types: ["ADU (Accessory Dwelling Unit)"] },
-  { image: img9, location: "Imperial Hwy", link: "imperial-hwy", types: ["Commercial Construction"] },
-  { image: img10, location: "Sawyer", link: "sawyer", types: ["Concrete/Structural", "Residential Construction"] },
-  { image: img11, location: "Delano", link: "delano", types: ["Concrete/Structural", "Engineering & Associated Services"] },
-  { image: img12, location: "Allenford", link: "allenford", types: ["Concrete/Structural", "Residential Construction"] },
-  { image: img13, location: "Car Wash", link: "car-wash", types: ["Commercial Construction", "Concrete/Structural"] },
-  { image: img14, location: "Linda Flora", link: "linda-flora", types: ["Concrete/Structural", "Residential Construction"] },
-  { image: img15, location: "Mulberry", link: "mulberry", types: ["Concrete/Structural", "Residential Construction"] },
-  { image: img16, location: "Rising Glen", link: "rising-glen", types: ["Concrete/Structural", "Residential Construction"] },
-  { image: img17, location: "210 N. Kenmore", link: "210-n-kenmore-avenue", types: ["SB721/SB362 Inspections"] },
-  { image: img18, location: "15436 Milbank", link: "15436-milbank", types: ["ADU (Accessory Dwelling Unit)", "Residential Construction"] },
-  { image: img19, location: "515 N. Mariposa", link: "515-n-mariposa-avenue", types: ["SB721/SB362 Inspections"] },
-  { image: img20, location: "Arco Convenience Store", link: "arco-convenient-store", types: ["Commercial Construction"] },
-  { image: img21, location: "Clinton", link: "clinton", types: [] },
-  { image: img22, location: "Genesee", link: "genesee", types: ["Engineering & Associated Services", "Soft Story Retrofit"] },
-  { image: img23, location: "Rosewood", link: "rosewood", types: ["Engineering & Associated Services", "Soft Story Retrofit"] },
-  { image: img24, location: "128 Palm", link: "128-palm", types: ["Soft Story Retrofit"] }
-];*/
-
-
-
-
 export const PROJECTS = [
   {
-    location: "N. Manhattan",
+    location: "N. Manhattan",    
     image: img1,
     link: "n-manhattan", types: ["Concrete/Structural", "Engineering & Associated Services", "Soft Story Retrofit"],
     project_type: "Soft Story Retrofit",
@@ -69,6 +39,15 @@ export const PROJECTS = [
     state: "CA",
     zip: "90004",
     year: "2021",
+    seo: {
+      title: "N.Manhattan - MaeCMServices Construction Management",
+      description: "Seismic soft-story retrofit project overview, scope, and results.",
+      keywords: "soft story retrofit, concrete, structural, engineering & associated services, foundation Work, structural repairs, THP, structural steel, reinforcing steel, structural framing , Los Angeles",
+      // optional: if you want exact canonical per project
+      url: "https://maecmservices.com/portfolio/n-manhattan",
+      // optional: open graph image
+      image: img1
+    },    
     additional_images: [
       "shoring-570x570.jpg",
       "wide-shot-570x570.jpg",
@@ -96,6 +75,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90036",
     year: "2019",
+    seo: {
+      title: "Chochran - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a soft story retrofit project in the Cochran area of Los Angeles, CA, providing foundation work, structural repairs, shoring, paving, and THP compliance. Our team delivered comprehensive concrete, structural, and engineering services to improve seismic safety and code compliance.",
+      keywords: "soft story retrofit, Cochran Los Angeles project, seismic retrofit Los Angeles, foundation work, structural repairs, shoring services, THP compliance, structural steel, reinforcing steel, structural framing, concrete structural services, engineering services, property management construction, multifamily retrofit Los Angeles, earthquake retrofit California",
+      url: "https://maecmservices.com/portfolio/chochran",
+      image: img2
+    },     
     additional_images: [
       "4-paving-570x570.jpg",
       "5-570x570.jpg",
@@ -106,8 +92,8 @@ export const PROJECTS = [
 
   {
     location: "Holt",
-    link: "holt", types: ["Concrete/Structural", "Engineering & Associated Services", "Soft Story Retrofit"],
     image: img3,
+    link: "holt", types: ["Concrete/Structural", "Engineering & Associated Services", "Soft Story Retrofit"],
     project_type: "Soft Story Retrofit",
     categories: [
       "Property Management Services",
@@ -119,6 +105,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90035",
     year: "2021",
+    seo: {
+      title: "Holt - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a soft story retrofit project on Holt in Los Angeles, CA, delivering THP compliance, foundation work, structural repairs, and seismic reinforcement. Our engineering and concrete specialists improved structural safety and code compliance for this multifamily property.",
+      keywords: "soft story retrofit, Holt Los Angeles project, seismic retrofit Los Angeles, THP compliance, foundation work, structural repairs, structural steel, reinforcing steel, structural framing, concrete structural services, engineering services, multifamily retrofit Los Angeles, earthquake retrofit California, property management construction",
+      url: "https://maecmservices.com/portfolio/holt",
+      image: img3
+    },     
     additional_images: [
       "20201230_181706000_iOS-570x570.jpg",
       "20201221_230226963_iOS-570x570.jpg",
@@ -142,6 +135,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90005",
     year: "2021",
+    seo: {
+      title: "S.Manhattan - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a soft story retrofit project on S. Manhattan in Los Angeles, CA, providing foundation work, structural repairs, THP compliance, and seismic reinforcement. Our concrete and engineering teams strengthened this multifamily property to meet safety and code requirements.",
+      keywords: "soft story retrofit, S Manhattan Los Angeles project, seismic retrofit Los Angeles, THP compliance, foundation work, structural repairs, structural steel, reinforcing steel, structural framing, concrete structural services, engineering services, multifamily retrofit Los Angeles, earthquake retrofit California, property management construction",
+      url: "https://maecmservices.com/portfolio/s-manhattan",
+      image: img4
+    },      
     additional_images: [
       "IMG_0760-570x570.jpg",
       "IMG_0773-570x570.jpg",
@@ -171,6 +171,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90035",
     year: "2020-Present",
+    seo: {
+      title: "Robertson - MaeCMServices Construction Management",
+      description: "MAE CM Services delivered a concrete and structural commercial construction project on Robertson in Los Angeles, CA, including engineering collaboration, demolition, excavation, grading, foundation work, retaining walls, slab foundations, and drainage. Our team managed comprehensive site work to support long-term structural performance and compliance.",
+      keywords: "concrete structural construction, Robertson Los Angeles project, commercial construction Los Angeles, foundation work, retaining wall construction, slab foundation, demolition services, excavation and grading, site work construction, drainage installation, engineering collaboration, structural concrete services, commercial site development, Los Angeles construction project",
+      url: "https://maecmservices.com/portfolio/robertson",
+      image: img5
+    },      
     additional_images: []
   },
 
@@ -189,6 +196,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90029",
     year: "2020",
+    seo: {
+      title: "N. Westmoreland1 - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a tenant improvement project on N. Westmoreland in Los Angeles, CA, delivering kitchen remodeling, residential renovations, and THP compliance. Our engineering-led approach ensured quality construction, regulatory alignment, and efficient project delivery for this residential property.",
+      keywords: "tenant improvement, N Westmoreland Los Angeles project, kitchen remodeling, residential renovation, remodel and renovation, THP compliance, ADU related construction, engineering services, property management construction, residential construction Los Angeles, interior remodeling services, multifamily tenant improvement",
+      url: "https://maecmservices.com/portfolio/n-westmoreland1",
+      image: img6
+    },      
     additional_images: [
       "6-570x570.jpg",
       "1-570x570.jpg",
@@ -214,6 +228,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90029",
     year: "2020",
+    seo: {
+      title: "N. Westmoreland2 - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a tenant improvement project on N. Westmoreland in Los Angeles, CA, providing kitchen remodeling, residential renovations, and THP compliance. Our engineering and construction teams delivered high-quality improvements aligned with property management and residential standards.",
+      keywords: "tenant improvement, N Westmoreland Los Angeles project, kitchen remodeling, residential renovation, remodel and renovation, THP compliance, ADU related construction, engineering services, general home construction, property management services, residential construction Los Angeles, interior remodeling",
+      url: "https://maecmservices.com/portfolio/n-westmoreland2",
+      image: img7
+    },      
     additional_images: [
       "6-1-570x570.jpg",
       "1-1-570x570.jpg",
@@ -239,6 +260,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90046",
     year: "2021",
+    seo: {
+      title: "Poinsettia Pl - MaeCMServices Construction Management",
+      description: "MAE CM Services completed an ADU project on Poinsettia Place in West Hollywood, CA, delivering slab foundation work, structural framing, and general construction. Our team provided a high-quality accessory dwelling unit designed to add livable space and long-term property value.",
+      keywords: "Accessory Dwelling Unit, ADU construction, Poinsettia Place West Hollywood project, accessory dwelling unit, slab foundation, structural framing, general construction, residential ADU services, property management construction, concrete structural services, West Hollywood ADU, backyard ADU California, residential construction West Hollywood",
+      url: "https://maecmservices.com/portfolio/poinsettia-pl",
+      image: img8
+    },       
     additional_images: [
       "2-3-570x570.jpg",
       "3-3-570x570.jpg",
@@ -263,6 +291,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90280",
     year: "",
+    seo: {
+      title: "Imperial Hwy - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a commercial construction project on Imperial Highway in South Gate, CA, delivering foundation work, paving, tenant improvements, and service station construction. Our team provided comprehensive concrete, structural, and site work solutions to support long-term commercial operations.",
+      keywords: "commercial construction, Imperial Highway South Gate project, service station construction, tenant improvement, foundation work, paving services, concrete structural construction, site work construction, commercial site development, South Gate commercial construction, Los Angeles County construction services",
+      url: "https://maecmservices.com/portfolio/imperial-hwy",
+      image: img9
+    },     
     additional_images: [
       "2-5-570x570.jpg",
       "3-4-570x570.jpg",
@@ -305,6 +340,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90035",
     year: "2007",
+    seo: {
+      title: "Sawyer - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a residential hardscape and landscape project on Sawyer in Los Angeles, CA, providing grading, slab foundation work, and general construction. Our concrete and site work expertise supported durable outdoor improvements and long-term residential functionality.",
+      keywords: "hardscape and landscape construction, Sawyer Los Angeles project, residential construction Los Angeles, slab foundation, grading services, general construction, site work construction, concrete structural services, residential site work, outdoor construction projects, Los Angeles residential construction",
+      url: "https://maecmservices.com/portfolio/sawyer",
+      image: img10
+    },       
     additional_images: [
       "P1000441-570x570.jpg",
       "P1000452-570x570.jpg",
@@ -331,6 +373,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "91401",
     year: "",
+    seo: {
+      title: "Delano - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a soft story retrofit project on Delano in Van Nuys, CA, providing THP compliance, structural repairs, and seismic reinforcement. Our concrete and engineering teams strengthened this multifamily property to improve safety, structural integrity, and code compliance.",
+      keywords: "soft story retrofit, Delano Van Nuys project, seismic retrofit Van Nuys, THP compliance, structural repairs, structural framing, structural steel, reinforcing steel, concrete structural services, engineering services, multifamily retrofit California, earthquake retrofit Los Angeles County, property management construction",
+      url: "https://maecmservices.com/portfolio/delano",
+      image: img11
+    },       
     additional_images: [
       "IMG_1107-min-570x570.jpeg",
       "IMG_1108-min-570x570.jpeg",
@@ -369,6 +418,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "2010",
+    seo: {
+      title: "Allenford - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a residential hardscape project on Allenford in Los Angeles, CA, providing grading, excavation, foundation work, and landscape improvements. Our concrete and site work expertise delivered durable outdoor construction solutions tailored to residential properties.",
+      keywords: "residential hardscape construction, Allenford Los Angeles project, grading services, excavation services, foundation work, landscape and hardscape, residential construction Los Angeles, site work construction, concrete structural services, outdoor residential construction, hardscape projects California",
+      url: "https://maecmservices.com/portfolio/allenford",
+      image: img12
+    },     
     additional_images: [
       "Allenford-3-570x570.jpg",
       "Allenford-8-570x570.jpg",
@@ -402,6 +458,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "2016",
+    seo: {
+      title: "Car Wash - MaeCMServices Construction Management",
+      description: "MAE CM Services completed an express car wash commercial construction project in Los Angeles, CA, delivering foundation work, reinforcing steel installation, and excavation. Our concrete and structural expertise supported durable infrastructure designed for high-traffic commercial operations.",
+      keywords: "express car wash construction, car wash construction project, commercial construction Los Angeles, foundation work, reinforcing steel, excavation services, concrete structural construction, site work construction, commercial site development, car wash facility build, Los Angeles commercial construction",
+      url: "https://maecmservices.com/portfolio/car-wash",
+      image: img13
+    },      
     additional_images: [
       "2-2-1-570x570.jpg",
       "2-6-570x570.jpg",
@@ -428,9 +491,16 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "2018",
+    seo: {
+      title: "Linda Flora - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a hillside pool foundation project on Linda Flora in Bel Air, CA, providing demolition, grading, caisson installation, excavation, and hillside repairs. Our concrete and structural expertise ensured stability, safety, and long-term performance on a challenging hillside site.",
+      keywords: "hillside pool foundation, Linda Flora Bel Air project, caisson construction, hillside repairs, grading services, excavation services, demolition work, concrete structural construction, hillside construction California, residential structural work, Bel Air residential construction",
+      url: "https://maecmservices.com/portfolio/linda-flora",
+      image: img14
+    },      
     additional_images: [
       "pool-570x570.jpg",
-      "IMG_8208-570x570.jpeg",
+      "IMG_8208-570x570.jpg",
       "IMG_8212-570x570.jpeg",
       "IMG_8213-570x570.jpeg",
       "IMG_8214-570x570.jpg",
@@ -459,6 +529,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "",
+    seo: {
+      title: "Mulberry - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a residential concrete and structural construction project at the Mulberry location in California. Our team provided professional construction services focused on quality workmanship, structural integrity, and long-term performance.",
+      keywords: "concrete structural construction, Mulberry California project, residential construction, concrete services, structural work, site construction services, California residential construction, building structural services",
+      url: "https://maecmservices.com/portfolio/mulberry",
+      image: img15
+    },         
     additional_images: []
   },
 
@@ -476,6 +553,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "",
+    seo: {
+      title: "Rising Glen - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a structural concrete residential project at the Rising Glen location in California, including demolition and grading. Our team delivered precise site work and concrete services focused on safety, structural integrity, and long-term performance.",
+      keywords: "structural concrete, Rising Glen California project, residential concrete construction, demolition services, grading services, site work construction, concrete structural services, residential site preparation, California residential construction",
+      url: "https://maecmservices.com/portfolio/rising-glen",
+      image: img16
+    },     
     additional_images: [
       "2-8-570x570.jpg",
       "3-7-570x570.jpg",
@@ -498,6 +582,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "",
+    seo: {
+      title: "210 N. Kenmore - MaeCMServices Construction Management",
+      description: "MAE CM Services conducted an SB 721 / SB 362 visual inspection at 210 N. Kenmore Avenue in Los Angeles, CA. Our licensed professionals evaluated exterior elevated elements to support building safety, regulatory compliance, and ongoing inspection requirements.",
+      keywords: "SB 721 inspection, SB 362 inspection, balcony and deck inspection, visual inspection services, exterior elevated elements, building safety inspection, Los Angeles SB721 compliance, multifamily inspection services, California building inspection, property safety compliance",
+      url: "https://maecmservices.com/portfolio/210-n-kenmore-avenue",
+      image: img17
+    },      
     additional_images: [
       "IMG_0167-min-min-570x570.jpg",
       "IMG_0168-min-min-570x570.jpg",
@@ -533,6 +624,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "2022",
+    seo: {
+      title: "15436 Milbank - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a full residential remodel and ADU project at 15436 Milbank in Encino, CA, delivering demolition and a complete renovation of over 2,600 square feet. Our residential construction team transformed the property with high-quality craftsmanship, modern functionality, and long-term value.",
+      keywords: "complete home remodel, ADU construction, 15436 Milbank Encino project, residential renovation, demolition services, large scale remodel, accessory dwelling unit, residential construction Encino, pool remodel construction, California home renovation",
+      url: "https://maecmservices.com/portfolio/15436-milbank",
+      image: img18
+    },      
     additional_images: [
       "9259FB18-F67D-4E4A-A3E8-8031DA7ACD98-min-570x570.jpg",
       "b24462ad-d0ca-4775-9b63-949b640d2cf9-min-570x570.jpg",
@@ -570,6 +668,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "",
+    seo: {
+      title: "515 N. Mariposa - MaeCMServices Construction Management",
+      description: "MAE CM Services performed SB 721 and SB 362 inspections and completed required repairs at 515 N. Mariposa Avenue in Los Angeles, CA. Our team addressed foundation work, structural repairs, framing, and tenant-related repairs to restore safety and ensure ongoing compliance with California regulations.",
+      keywords: "SB 721 inspection and repairs, SB 362 compliance, balcony and deck repairs, structural repairs, foundation work, structural framing, tenant repairs, Los Angeles SB721 services, exterior elevated elements repair, building safety compliance, multifamily inspection repairs",
+      url: "https://maecmservices.com/portfolio/515-n-mariposa-avenue",
+      image: img19
+    },      
     additional_images: [
       "IMG_0267-min-570x570.jpg",
       "IMG_0243-min-570x570.jpg",
@@ -592,6 +697,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "",
+    seo: {
+      title: "Arco Convenience Store - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a commercial construction project for an Arco convenience store in California. Our team delivered professional construction services focused on quality workmanship, durability, and efficient project execution for a high-traffic retail environment.",
+      keywords: "commercial construction, Arco convenience store project, retail construction California, commercial building services, concrete construction, site development services, California commercial construction, convenience store construction",
+      url: "https://maecmservices.com/portfolio/arco-convenient-store",
+      image: img20
+    },       
     additional_images: []
   },
 
@@ -610,6 +722,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "90004",
     year: "2021",
+    seo: {
+      title: "Clinton - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a soft story retrofit project on Clinton in Los Angeles, CA, delivering shoring, foundation work, structural repairs, THP compliance, and seismic reinforcement. Our concrete and engineering teams strengthened this multifamily property to improve safety and meet California seismic requirements.",
+      keywords: "soft story retrofit, Clinton Los Angeles project, seismic retrofit Los Angeles, THP compliance, foundation work, structural repairs, shoring services, structural steel, reinforcing steel, structural framing, concrete structural services, engineering services, multifamily retrofit Los Angeles, earthquake retrofit California",
+      url: "https://maecmservices.com/portfolio/clinton",
+      image: img21
+    },     
     additional_images: [
       "2-4-570x570.jpg",
       "asdf-570x570.jpg",
@@ -634,6 +753,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "2023",
+    seo: {
+      title: "Genesee - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a soft story retrofit project on Genesee in West Hollywood, CA, delivering THP compliance, structural repairs, and seismic reinforcement. Our engineering and concrete teams strengthened this property to enhance safety, structural integrity, and compliance with California seismic regulations.",
+      keywords: "soft story retrofit, Genesee West Hollywood project, seismic retrofit West Hollywood, THP compliance, structural repairs, structural framing, structural steel, reinforcing steel, concrete structural services, engineering services, multifamily retrofit California, earthquake retrofit Los Angeles County",
+      url: "https://maecmservices.com/portfolio/genesee",
+      image: img22
+    },     
     additional_images: [
       "a32068e9-d84f-4f36-84f2-0270db68e4e7-min-570x570.jpg",
       "b3e30bcb-829d-4832-9311-c3b244ce5846-min-570x570.jpg",
@@ -670,6 +796,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "2023",
+    seo: {
+      title: "Rosewood - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a soft story retrofit project on Rosewood in Los Angeles, CA, providing THP compliance, structural repairs, and seismic reinforcement. Our engineering and concrete teams enhanced building safety, structural integrity, and compliance with California seismic standards.",
+      keywords: "soft story retrofit, Rosewood Los Angeles project, seismic retrofit Los Angeles, THP compliance, structural repairs, structural framing, structural steel, reinforcing steel, concrete structural services, engineering services, multifamily retrofit California, earthquake retrofit Los Angeles County",
+      url: "https://maecmservices.com/portfolio/rosewood",
+      image: img23
+    },      
     additional_images: [
       "IMG_6944-min-570x570.jpeg",
       "IMG_6946-min-570x570.jpeg",
@@ -703,6 +836,13 @@ export const PROJECTS = [
     state: "CA",
     zip: "",
     year: "2023",
+    seo: {
+      title: "128 Palm - MaeCMServices Construction Management",
+      description: "MAE CM Services completed a soft story retrofit project at 128 Palm in Beverly Hills, CA, delivering structural repairs and seismic reinforcement. Our concrete and structural specialists strengthened this property to improve safety, resilience, and compliance with California seismic requirements.",
+      keywords: "soft story retrofit, 128 Palm Beverly Hills project, seismic retrofit Beverly Hills, structural repairs, structural framing, structural steel, reinforcing steel, concrete structural services, earthquake retrofit California, multifamily retrofit Beverly Hills",
+      url: "https://maecmservices.com/portfolio/128-palm",
+      image: img24
+    },        
     additional_images: [
       "1AC04B6C-DB46-45B9-9EDF-F5FA7B8D421B-min-570x570.jpg",
       "2a26b40c-73f8-4154-98c0-c7e94a4f48cb-min-570x570.jpg",

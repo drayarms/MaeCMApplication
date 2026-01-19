@@ -1,9 +1,10 @@
 import bannerImg from "../../assets/Mae-CM-Services-Main-Soft-Story-Retrofit.jpg";
 
 export const SOFT_STORY_RETROFIT = {
+  
   title: "Soft Story Retrofit",
   seo: {
-    title: "Soft Story Retrofit Services | MAE CM",
+    title: "Soft Story Retrofit - MaeCMSevices Construction Management",
     description:
       "Professional soft story retrofit services to strengthen vulnerable structures and comply with California seismic regulations.",
     canonical: "https://maecmservices.com/services/soft-story-retrofit",

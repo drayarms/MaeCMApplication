@@ -1,4 +1,3 @@
-// src/data/services-data.js
 export const SERVICES = [
   {
     image: require("../assets/Mae-CM-Services-Main-Soft-Story-Retrofit-600x400.jpg"),
