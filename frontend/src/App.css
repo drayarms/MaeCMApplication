@@ -95,6 +95,8 @@
 
   .header-top-mobile-only {
     display: inline-flex;
+    font-weight: 600;
+    height: 40px;   
   }
 }
 
